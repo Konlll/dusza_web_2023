@@ -46,7 +46,8 @@ authRouter.post("/register", async (req, res) => {
             password: passwordHash,
             role: req.body.role,
             grade: req.body.grade || null,
-            class: req.body.class || null       }
+            class: req.body.class || null
+        }
     });
 
     /*
