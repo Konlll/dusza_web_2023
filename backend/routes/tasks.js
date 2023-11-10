@@ -1,19 +1,18 @@
 import express from "express";
 import prisma from "../db.js";
+import { Authenticate } from "../authentication.js";
 
 export const tasksRouter = express.Router();
 
-// TODO: ACCESS CONTROL
-
 // Get all tasks
-tasksRouter.get("/", async (req, res) => {
+tasksRouter.get("/", Authenticate(["TEACHER"]), async (req, res) => {
     const tasks = await prisma.task.findMany();
 
     res.json(tasks);
 })
 
 // Get a single task
-tasksRouter.get("/:id", async (req, res) => {
+tasksRouter.get("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
@@ -34,7 +33,7 @@ tasksRouter.get("/:id", async (req, res) => {
 })
 
 // Upload file
-tasksRouter.post("/upload", async (req, res) => {
+tasksRouter.post("/upload", Authenticate(["TEACHER"]), async (req, res) => {
     const lines = req.body.text.split('\n');
 
     let data = [];
@@ -60,8 +59,7 @@ tasksRouter.post("/upload", async (req, res) => {
             continue;
         }
 
-        // TODO: Teacher ID
-        data.push({ "word1": fields[0], "word2": fields[1], "word3": fields[2], "word4": fields[3], "grade": grade, "teacherId": 1 });
+        data.push({ "word1": fields[0], "word2": fields[1], "word3": fields[2], "word4": fields[3], "grade": grade, "teacherId": req.user.id });
     }
 
     let success = 0;
@@ -74,7 +72,7 @@ tasksRouter.post("/upload", async (req, res) => {
 })
 
 // Delete a task
-tasksRouter.delete("/:id", async (req, res) => {
+tasksRouter.delete("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
@@ -96,7 +94,7 @@ tasksRouter.delete("/:id", async (req, res) => {
 })
 
 // Edit a task
-tasksRouter.put("/:id", async (req, res) => {
+tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
