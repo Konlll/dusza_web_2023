@@ -11,59 +11,59 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   username String
   password String
-  role Role
-  grade Int?
-  class String?
-  groupId Int
-  group   Group @relation(fields: [groupId], references: [id])
-  tasks Task[]
-  results Result[]
+  role     Role
+  grade    Int?
+  class    String?
+  groupId  Int?
+  group    Group?   @relation(fields: [groupId], references: [id])
+  tasks    Task[]
+  results  Result[]
 }
 
 model Group {
-  id Int @id @default(autoincrement())
-  name String
-  description String
-  users User[]
+  id            Int         @id @default(autoincrement())
+  name          String
+  description   String
+  users         User[]
   competitionId Int
-  competition Competition @relation(fields: [competitionId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id])
 }
 
 model Competition {
-  id Int @id @default(autoincrement())
-  name String
+  id          Int      @id @default(autoincrement())
+  name        String
   description String
-  grade Int
-  startDate DateTime
-  endDate DateTime
-  groups Group[]
-  tasks Task[]
-  results Result[]
+  grade       Int
+  startDate   DateTime
+  endDate     DateTime
+  groups      Group[]
+  tasks       Task[]
+  results     Result[]
 }
 
 model Task {
-  id Int @id @default(autoincrement())
-  word1 String
-  word2 String
-  word3 String
-  word4 String
-  grade Int
-  teacherId Int
-  teacher User @relation(fields: [teacherId], references: [id])
+  id           Int           @id @default(autoincrement())
+  word1        String
+  word2        String
+  word3        String
+  word4        String
+  grade        Int
+  teacherId    Int
+  teacher      User          @relation(fields: [teacherId], references: [id])
   competitions Competition[]
 }
 
 model Result {
-  id Int @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   competitionId Int
-  competition Competition @relation(fields: [competitionId], references: [id])
-  userId Int
-  user User @relation(fields: [userId], references: [id])
-  score Int
-  time Int
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  userId        Int
+  user          User        @relation(fields: [userId], references: [id])
+  score         Int
+  time          Int
 }
 
 enum Role {
