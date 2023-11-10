@@ -54,6 +54,8 @@ model Task {
   teacherId    Int
   teacher      User          @relation(fields: [teacherId], references: [id])
   competitions Competition[]
+
+  @@unique([word1, word2, word3, word4, grade])
 }
 
 model Result {
