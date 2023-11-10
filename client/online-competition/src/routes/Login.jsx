@@ -1,7 +1,7 @@
 //ts@check
 "use strict";
 import { useRef } from "react";
-import '../styles/Login.css';
+import '../styles/LoginRegister.css';
 
 const Login = () => {
     /** @type {React.MutableRefObject<string>} */
