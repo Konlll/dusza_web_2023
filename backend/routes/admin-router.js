@@ -44,6 +44,26 @@ adminRouter.put("user/:id", async (req,res) =>
        res.status(200).send(`Successfully updated user with ID:  ${req.params.id}`).json(user);
     })
 
+
+
+adminRouter.post("user/", async (req,res) => 
+    {
+            const user = prisma.user.update( 
+                {
+                    where: 
+                    {
+                        id: req.params.id
+                    },
+                    data: 
+                    {
+                        ...req.body
+                    }
+                });
+       res.status(200).send(`Successfully created user with ID:  ${req.params.id}`).json(user);
+    })
+
+
+
 adminRouter.delete("/user/:id", async (req,res) => 
     {
         const user = await primsa.user.delete({

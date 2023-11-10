@@ -7,17 +7,18 @@ export const authRouter = express.Router();
  * TODO: sessionon való döntés
  * TODO: logout implementálása
  */
+authRouter.use(express.json())
 authRouter.post("/login", async (req, res) => {
-    if (req.body.username == undefined || req.body.password == undefined) {
+    const {username, password} = req.body;
+    if (username == undefined || password == undefined) {
         return res.status(400).send();
     }
-
     const passwordHash = HashPassword(req.body.password)
 
     const user = await prisma.user.findFirst({
         where: {
             AND: [
-                { username: req.body.username },
+                { username: username },
                 { password: passwordHash }
             ]
         },
@@ -25,18 +26,19 @@ authRouter.post("/login", async (req, res) => {
 
     if (user != null) {
         const token = GenerateToken(user.id);
-        res.json({ token });
+        res.json( token );
     } else {
-        return res.status(401).send("Incorrect password or username");
+        return res.status(401).send({err: "Incorrect password or username"});
     }
 })
 
 authRouter.post("/register", async (req, res) => {
-    if (req.body.username == undefined || req.body.password == undefined || req.body.role == undefined) {
+    const {username, password, role} = req.body;
+    if (username == undefined || password == undefined || role == undefined) {
         return res.status(400).send();
     }
 
-    const passwordHash = HashPassword(req.body.password)
+    const passwordHash = HashPassword(password)
 
     const user = await prisma.user.create({
         data: {
@@ -48,12 +50,14 @@ authRouter.post("/register", async (req, res) => {
         }
     });
 
+    /*
     const token = GenerateToken(user.id);
     res.json({ token });
-
+    */
+ res.status(200).json({message: `successfully created user with there params: ${username}, ${password}, ${role}`});
 });
 
 authRouter.post("/logout", (req,res) => 
     {
-        //TODO: clear the token and the session
+        //TODO: implement the ability to log out
     })

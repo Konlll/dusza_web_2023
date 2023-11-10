@@ -55,6 +55,18 @@ juryRouter.put("/competition/:id", async (req,res) =>
 
 })
 
+juryRouter.post("/competition", async (req, res) => 
+    {
+        const new_competition =  await prisma.competition.create( 
+            {
+                data: {
+                    ...req.body
+                }
+            });
+        res.status(200).send("Successfully created competition").json(new_competition);
+
+    })
+
 juryRouter.delete("/competition/:id", async (req,res) => 
     {
         const result = await prisma.competition.delete({

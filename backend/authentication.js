@@ -1,10 +1,12 @@
 import { createHmac } from "crypto";
 import prisma from "./db.js";
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv";
+dotenv.config()
 const secret = process.env.SECRET;
 
 export function HashPassword(password) {
+    console.log(`${secret}\n`)
     return createHmac('sha256', secret).update(password).digest('hex');
 }
 
