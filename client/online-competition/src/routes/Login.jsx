@@ -12,12 +12,16 @@ const Login = () => {
      */
     const HandleSubmit = (event) => {
         event.preventDefault()
-        fetch("/api/login",  {
+        fetch("/api/auth/login",  {
             method : "POST",
-            body: {
+            headers: 
+            {
+                "Content-type" : "application/json"
+            },
+            body: JSON.stringify({
                 username : usernameRef.current,
                 password : passwordRef.current
-            }
+            })
         })
         .then(res => res.json())
         .then(data => console.log(data))
@@ -26,7 +30,7 @@ const Login = () => {
     return (
         <>
             <h1>Online Vetélkedő</h1>
-            <form method="POST" onSubmit={HandleSubmit}>
+            <form  onSubmit={HandleSubmit}>
                 <h2>Jelentkezzen be!</h2>
                 <input type="text" ref={usernameRef}  onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév"/>
                 <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} placeholder="Jelszó" />
