@@ -1,0 +1,35 @@
+form{
+    background-color: var(--primary-color);
+    margin: auto;
+    padding: 25px;
+    display: flex;
+    color: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
+h1{
+    font-size: 38px;
+}
+input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #fff;
+    width: 400px;
+    padding: 15px;
+    color: #fff;
+    font-size: 18px;
+}
+button{
+    background-color: transparent;
+    color: #fff;
+    margin-top: 20px;
+    font-size: 25px;
+    padding: 15px;
+    border: 2px solid #fff;
+}
