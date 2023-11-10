@@ -3,6 +3,8 @@ import prisma from '../db.js'
 
 export const userActionRouter = express.Router();
 
+
+// Update a user
 userActionRouter.put('/edit/:id', async (req, res) => {
     const id = parseInt(req.params.id)
     if (isNaN(id)) {
