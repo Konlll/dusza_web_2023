@@ -4,6 +4,8 @@ import { teacherRouter } from "./routes/teacher-router.js";
 import { adminRouter } from "./routes/admin-router.js";
 import { tasksRouter } from "./routes/tasks.js";
 import { userActionRouter } from "./routes/user-action.js";
+import { authRouter } from "./routes/auth.js";
+
 
 dotenv.config();
 const app = express();
@@ -17,6 +19,7 @@ app.use('/teacher', teacherRouter);
 app.use('/admin', adminRouter);
 app.use("/tasks", tasksRouter);
 app.use('/user', userActionRouter)
+app.use("/auth", authRouter);
 
 
 app.get('/', (req, res) => {
