@@ -6,7 +6,7 @@ export const juryRouter = express.Router();
 juryRouter.use(express.json());
 
 // get all competitions
-juryRouter.get("/", asnyc (req, res) => 
+juryRouter.get("/", async (req, res) => 
 {
    const rows = await prisma.competition.findMany();
    if(rows == null) 
@@ -33,7 +33,7 @@ juryRouter.get("/competition/:id", async (req,res) =>
     });
 
 //change the competition
-juryRouter.put("/competition/:id", asnyc (req,res) => 
+juryRouter.put("/competition/:id", async (req,res) => 
     {
         const {name,description,grade,startDate,endDate,groups,tasks,results} = req.body;
       const competition = await prisma.competition.update(
