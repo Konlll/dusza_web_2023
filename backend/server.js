@@ -21,16 +21,10 @@ app.use("/tasks", tasksRouter);
 app.use('/user', userActionRouter)
 app.use("/auth", authRouter);
 
-
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.post('/api/login', (req, res) => {
-  //TODO: handle login
-  const { username, password } = req.body;
-  res.send(username, password);
-});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -35,13 +35,13 @@ adminRouter.put("user/:id", async (req,res) =>
                     where: 
                     {
                         id: req.params.id
-                    }
+                    },
                     data: 
                     {
                         ...req.body
                     }
-                })
-       res.status(200).send(`Successfully updated user with ID:  ${req.params.id}`);
+                });
+       res.status(200).send(`Successfully updated user with ID:  ${req.params.id}`).json(user);
     })
 
 adminRouter.delete("/user/:id", async (req,res) => 

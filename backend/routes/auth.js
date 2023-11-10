@@ -3,7 +3,10 @@ import prisma from "../db.js";
 import { HashPassword, GenerateToken } from "../authentication.js";
 
 export const authRouter = express.Router();
-
+/* 
+ * TODO: sessionon való döntés
+ * TODO: logout implementálása
+ */
 authRouter.post("/login", async (req, res) => {
     if (req.body.username == undefined || req.body.password == undefined) {
         return res.status(400).send();
@@ -46,4 +49,9 @@ authRouter.post("/register", async (req, res) => {
     const token = GenerateToken(user.id);
     res.json({ token });
 
-})
+});
+
+authRouter.post("/logout", (req,res) => 
+    {
+        //TODO: clear the token and the session
+    })
