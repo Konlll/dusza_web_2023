@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import { teacherRouter } from "./routes/teacher-router.js";
 import { adminRouter } from "./routes/admin-router.js";
 import { tasksRouter } from "./routes/tasks.js";
 import { userActionRouter } from "./routes/user-action.js";
@@ -9,13 +8,12 @@ import { authRouter } from "./routes/auth.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 /* Middlewares */
 app.use(express.json());
 
 /* Routes */
-app.use('/teacher', teacherRouter);
 app.use('/admin', adminRouter);
 app.use("/tasks", tasksRouter);
 app.use('/user', userActionRouter)
