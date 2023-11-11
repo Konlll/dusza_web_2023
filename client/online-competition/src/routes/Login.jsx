@@ -2,11 +2,13 @@
 "use strict";
 import { useRef } from "react";
 import '../styles/LoginRegister.css';
+import { useNavigate} from "react-router-dom";
 
 const Login = () => {
     /** @type {React.MutableRefObject<string>} */
     const usernameRef = useRef("");
     const passwordRef = useRef("");
+    const navigate = useNavigate()
     /**
      * @param {React.FormEvent} event
      */
@@ -24,7 +26,10 @@ const Login = () => {
             })
         })
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => {
+            localStorage.setItem("access_token", data);
+            navigate("/dashboard");
+        })
         .catch(err => console.log(err));
     }
     return (
