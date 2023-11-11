@@ -8,7 +8,7 @@ authRouter.use(express.json())
 authRouter.post("/login", async (req, res) => {
     const { username, password } = req.body;
     if (username == undefined || password == undefined) {
-        return res.status(400).send();
+        return res.status(400).send("invalid username or password");
     }
     const passwordHash = HashPassword(req.body.password)
 

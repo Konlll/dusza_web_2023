@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../db.js";
 import {Authenticate} from "../authentication.js";
+import { error_obj } from "../server.js";
 export const juryRouter = express.Router();
 
 juryRouter.use(express.json());
@@ -11,7 +12,8 @@ juryRouter.get("/", Authenticate(["JUDGE"]) ,async (req, res) =>
    const rows = await prisma.competition.findMany();
    if(rows == null) 
     {
-        res.status(404).send("error");
+        error_obj = {err : 404}
+        return res.status(404).send("error");
     }
     res.status(200).json(rows);
 });
@@ -27,7 +29,8 @@ juryRouter.get("/:id", Authenticate(["JUDGE"]),async (req,res) =>
         })
         if(competition == null) 
         {
-            res.status(404).send("Not found.");
+            error_obj = {err : 404}
+            return res.status(404).send("error");
         }
         res.status(200).json(competition);
     });
@@ -41,19 +44,17 @@ juryRouter.put("/:id", Authenticate(["JUDGE"]), async (req,res) =>
                   id: parseInt(req.params.id)
               },
               data : {
-                  ...req.body
+                  //TODO: manually write instead of spread
               }
 
           }) 
         //TODO: Rewrite this logic
         if(competition.startDate > Date.now()) 
         {
-            res.status(403).send("Competition is already started, you cannot modify it.");
+            error_obj = {err : 403}
+            return res.status(403).send("error: You cannot modify competition that is in the progress");
         }
-        else {
             res.status(200).send();
-        }
-
 })
 
 juryRouter.post("/",Authenticate(["JUDGE"]), async (req, res) => 
@@ -61,7 +62,7 @@ juryRouter.post("/",Authenticate(["JUDGE"]), async (req, res) =>
         const new_competition =  await prisma.competition.create( 
             {
                 data: {
-                    ...req.body
+                    //TODO: manually write instead of spread
                 }
             });
         res.status(200).send("Successfully created competition").json(new_competition);
@@ -109,5 +110,10 @@ juryRouter.get("/results", Authenticate(["JUDGE"]), async (req, res) => {
                 score : true
             },
         });
+        if(results == null) 
+        {
+            error_obj = {err : 404};
+            return res.status(404);   
+        }
         res.json(results);
  })
