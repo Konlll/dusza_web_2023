@@ -2,7 +2,9 @@
 
 :root {
     --primary-color: #34495E;
+    --primary-hover-color: rgb(33, 44, 95);
     --secondary-color: #3498DB;
+    --darken-secondary-color: rgb(51, 132, 219);
     --secondary-hover-color: rgba(255, 255, 255, 0.3);
     --success-color: green;
     --success-hover-color: rgb(0,100,0);
