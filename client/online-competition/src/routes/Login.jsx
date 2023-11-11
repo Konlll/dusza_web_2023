@@ -14,15 +14,15 @@ const Login = () => {
      */
     const HandleSubmit = (event) => {
         event.preventDefault()
-        fetch("/api/auth/login",  {
-            method : "POST",
-            headers: 
+        fetch("/api/auth/login", {
+            method: "POST",
+            headers:
             {
-                "Content-type" : "application/json"
+                "Content-type": "application/json"
             },
             body: JSON.stringify({
-                username : usernameRef.current,
-                password : passwordRef.current
+                username: usernameRef.current,
+                password: passwordRef.current
             })
         })
         .then(res => res.json())
@@ -33,18 +33,19 @@ const Login = () => {
                 navigate("/dashboard");
         })
         .catch(err => navigate("/error")));
+
     }
     return (
         <>
             <h1>Online Vetélkedő</h1>
-            <form  onSubmit={HandleSubmit}>
+            <form onSubmit={HandleSubmit}>
                 <h2>Jelentkezzen be!</h2>
-                <input type="text" ref={usernameRef}  onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév"/>
+                <input type="text" ref={usernameRef} onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév" />
                 <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} placeholder="Jelszó" />
                 <button type="submit">Bejelentkezés</button>
             </form>
         </>
     );
 }
- 
+
 export default Login;

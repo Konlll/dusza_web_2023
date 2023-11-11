@@ -8,7 +8,7 @@ export const authRouter = express.Router();
  */
 authRouter.use(express.json())
 authRouter.post("/login", async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
     if (username == undefined || password == undefined) {
         return res.status(400).send();
     }
@@ -24,18 +24,18 @@ authRouter.post("/login", async (req, res) => {
     })
 
     if (user != null) {
-        const token = GenerateToken(user.id);
-        res.json( token );
+        const token = GenerateToken(user);
+        res.json(token);
 
         //store this token in local storage
-        localStorage.setItem("access_token",token)
+        localStorage.setItem("access_token", token)
     } else {
-        return res.status(401).send({err: "Incorrect password or username"});
+        return res.status(401).send({ err: "Incorrect password or username" });
     }
 })
 
 authRouter.post("/register", async (req, res) => {
-    const {username, password, role} = req.body;
+    const { username, password, role } = req.body;
     if (username == undefined || password == undefined || role == undefined) {
         return res.status(400).send();
     }
@@ -52,19 +52,17 @@ authRouter.post("/register", async (req, res) => {
         }
     });
 
-        /*
-            const token = GenerateToken(user.id);
-            res.json({ token });
-        */
- res.status(200).json({message: `successfully created user with there params: ${username}, ${password}, ${role}`});
+    /*
+        const token = GenerateToken(user);
+        res.json({ token });
+    */
+    res.status(200).json({ message: `successfully created user with there params: ${username}, ${password}, ${role}` });
 });
 
-authRouter.post("/logout", (req,res) => 
-    {
-        //TODO: implement the ability to log out
-        if(jwt.verify(localStorage.getItem("access_token"),process.env.SECRET).exp < Math.floor(Date.now() / 1000)) 
-        {
-            //TODO: Do something when token is expired
-            res.send("Token is expired");
-        }
-    })
+authRouter.post("/logout", (req, res) => {
+    //TODO: implement the ability to log out
+    if (jwt.verify(localStorage.getItem("access_token"), process.env.SECRET).exp < Math.floor(Date.now() / 1000)) {
+        //TODO: Do something when token is expired
+        res.send("Token is expired");
+    }
+})
