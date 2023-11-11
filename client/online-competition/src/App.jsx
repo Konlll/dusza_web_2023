@@ -6,6 +6,7 @@ import Tasks from './routes/Tasks';
 import Intro from "./routes/Intro";
 import IntroPage from "./components/CreateIntroduction";
 import ErrorPage from './components/Error';
+import Activity from './routes/Activity';
 
 function App() {
   return (
@@ -15,10 +16,11 @@ function App() {
           <Route path='/' Component={Login} />
           <Route path='/register' Component={Register} />
           <Route path='/tasks' Component={Tasks} />
-          <Route path='/dashboard' Component={ Dashboard} />
-          <Route path='/intro' Component={ Intro} />
+          <Route path='/dashboard' Component={Dashboard} />
+          <Route path='/intro' Component={Intro} />
           <Route path='/create-intro' Component={IntroPage} />
           <Route path='/error' Component={Error} />
+          <Route path='/activity' Component={Activity} />
         </Routes>
       </BrowserRouter>
     </>
