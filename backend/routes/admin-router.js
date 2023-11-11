@@ -2,7 +2,6 @@ import express from "express";
 import prisma from "../db.js";
 import { Authenticate, HashPassword } from "../authentication.js";
 export const adminRouter = express.Router();
-import {error_obj} from "../server.js";
 
 
 /**
@@ -13,7 +12,6 @@ adminRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
     res.status(200).json(rows);
     if(rows == null) 
     {
-        error_obj = {err : 404};
         return res.status(404);
     }
 
@@ -28,7 +26,6 @@ adminRouter.get("/group/:id", Authenticate(["ADMIN"]), async (req, res) => {
             }
         });
     if(group == null) {
-        error_obj = {err : 404}
         return res.status(404)
     }
     res.status(200).json(group);
@@ -37,7 +34,6 @@ adminRouter.get("/groups", Authenticate(["ADMIN"]), async (req, res) => {
     const groups = await prisma.group.findMany();
     if(groups == null) 
     {
-       error_obj = {err: 404};
         return res.status(404).send("Error");
     }
     res.json(groups)
@@ -80,7 +76,6 @@ adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
     }
     if(!user) 
     {
-        error_obj = {err: 500};
         return res.status(500).send("Internal server error");
 
     }
@@ -101,7 +96,6 @@ adminRouter.post("/:id", Authenticate(["ADMIN"]), async (req, res) => {
         });
     if(!user) 
     {
-        error_obj = {err: 500};
         return res.status(500).send("Internal server error");
     }
     res.status(200).json(user);
@@ -116,7 +110,6 @@ adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) =>
             }
         });
     if (user == null) {
-        error_obj = { err: 404}
         return res.status(404).send("Requested user not found.");
     }
     res.status(200).json(user);

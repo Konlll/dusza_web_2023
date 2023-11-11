@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../db.js";
 import { Authenticate } from "../authentication.js";
+import { error_obj } from "../server.js";
 export const competitionRouter = express.Router();
 
 competitionRouter.use(express.json());
@@ -17,6 +18,7 @@ competitionRouter.get("/:id", Authenticate(["JUDGE"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
+        error_obj = {err : 404};
         return res.status(404).send("Not found.");
     }
 
@@ -28,6 +30,7 @@ competitionRouter.get("/:id", Authenticate(["JUDGE"]), async (req, res) => {
     })
 
     if (competition == null) {
+        error_obj = {err : 404};
         res.status(404).send("Not found.");
     }
 
@@ -41,6 +44,7 @@ competitionRouter.put("/:id", Authenticate(["JUDGE"]), async (req, res) => {
         || req.body.grade == undefined
         || req.body.startDate == undefined
         || req.body.endDate == undefined) {
+        error_obj = {err : 400};
         return res.status(400).send("Missing fields");
     }
 
@@ -48,6 +52,7 @@ competitionRouter.put("/:id", Authenticate(["JUDGE"]), async (req, res) => {
     const startDate = new Date(Date.parse(req.body.startDate));
     const endDate = new Date(Date.parse(req.body.endDate));
     if (isNaN(grade) || isNaN(startDate) || isNaN(endDate) || endDate <= startDate) {
+        error_obj = {err : 400};
         return res.status(400).send();
     }
 
@@ -57,6 +62,7 @@ competitionRouter.put("/:id", Authenticate(["JUDGE"]), async (req, res) => {
     } else {
         id = parseInt(req.params.id);
         if (isNaN(id)) {
+            error_obj = {err : 404};
             return res.status(404).send("Not found.");
         }
 
@@ -64,6 +70,7 @@ competitionRouter.put("/:id", Authenticate(["JUDGE"]), async (req, res) => {
             where: { id: id }
         });
         if (new Date() > competition.startDate) {
+            error_obj = {err : 403};
             return res.status(403).send("Already started");
         }
     }
@@ -93,6 +100,7 @@ competitionRouter.delete("/:id", Authenticate(["JUDGE"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
+        error_obj = {err : 404};
         return res.status(404).send("Not found.");
     }
 
@@ -103,6 +111,7 @@ competitionRouter.delete("/:id", Authenticate(["JUDGE"]), async (req, res) => {
             },
         });
     } catch {
+        error_obj = {err : 404};
         return res.status(404).send("Not found.");
     }
 
@@ -113,14 +122,7 @@ competitionRouter.delete("/:id", Authenticate(["JUDGE"]), async (req, res) => {
 //RESULTS
 // Get all the results
 competitionRouter.get("/results", Authenticate(["JUDGE"]), async (req, res) => {
-    const results = await prisma.result.aggregate(
-        {
-            _sum:
-            {
-                score: true
-            }
-        })
-        .findMany({
+    const results = await prisma.result.findMany({
             include:
             {
                 competition:

@@ -12,7 +12,10 @@ const app = express();
 const port =  process.env.PORT;
 
 //global error object
-let error_obj = {}
+var error_obj = 
+    {
+        err : 0
+    }; 
 export { error_obj } ;
 /* Middlewares */
 app.use(express.json());
@@ -29,9 +32,10 @@ app.get('/', (req, res) => {
 });
 
 app.get("/error", (req,res) => {
-        return res.json(error_obj);
+        return res.send(error_obj);
 });
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
+ 
 });

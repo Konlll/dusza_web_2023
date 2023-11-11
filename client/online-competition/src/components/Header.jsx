@@ -22,7 +22,6 @@ const Header = () =>
     return (
         <>
             <nav>
-            {// TODO: add jsx in conditions}
                 <Switch>
                    <Case condition={role == "ADMIN"}>
                            <p>admin condition</p>

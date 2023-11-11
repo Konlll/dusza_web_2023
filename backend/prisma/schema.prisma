@@ -68,6 +68,14 @@ model Result {
   time          Int
 }
 
+model Settings {
+    id Int @id @default(autoincrement())
+    title String? 
+    desc String?
+    icon Bytes?
+}
+
+
 enum Role {
   ADMIN
   JUDGE

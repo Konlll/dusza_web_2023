@@ -10,14 +10,14 @@ const ErrorPage = (props) =>
         fetch("/api/error")
         .then(res => res.json())
         .then(data => setError(data))
-        .catch(err => setError(error))
+        .catch(err => setError(err))
     });
     return (
         <>
             <h2>Error</h2>
         {!props.errorValue ? 
-            <h3>HTTP error code: {error?.err || "Unknown"}</h3> :
-            <h3>Page not found.</h3>
+            <h3>HTTP error code: {error?.err || "Ismeretlen"}</h3> :
+            <h3>A megadott oldal nem található</h3>
         }
         </>
     );
