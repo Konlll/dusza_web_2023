@@ -28,8 +28,8 @@ model Group {
   name          String
   description   String
   users         User[]
-  competitionId Int
-  competition   Competition @relation(fields: [competitionId], references: [id])
+  competitionId Int?
+  competition   Competition? @relation(fields: [competitionId], references: [id])
 }
 
 model Competition {

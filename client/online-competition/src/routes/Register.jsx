@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const usernameRef = useRef(null)
@@ -6,6 +7,7 @@ const Register = () => {
     const roleRef = useRef(null)
     const gradeRef = useRef(null)
     const classRef = useRef(null)
+    const navigate = useNavigate()
 
     const competitorInfosRef = useRef(null)
     /** 
@@ -29,7 +31,10 @@ const Register = () => {
                         grade: parseInt(gradeRef.current.value) || null,
                         class : classRef.current.value
                     })
-            }).then(res => res.json()).then(data => console.log(data));
+            }).then(res => res.json()).then(data => {
+                console.log(data)
+            });
+            navigate('/dashboard')
     }
 
     const handleInputs = (e) => {

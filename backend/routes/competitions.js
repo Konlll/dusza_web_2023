@@ -26,6 +26,9 @@ competitionRouter.get("/:id", Authenticate(["JUDGE"]), async (req, res) => {
         where:
         {
             id: id
+        },
+        include: {
+            tasks: true
         }
     })
 
@@ -117,6 +120,36 @@ competitionRouter.delete("/:id", Authenticate(["JUDGE"]), async (req, res) => {
 
     res.json({});
 });
+
+competitionRouter.post("/:id/tasks", Authenticate(["JUDGE"]), async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+        return res.status(404).send("Not found.");
+    }
+
+    if (req.body.tasks == undefined) {
+        return res.status(400).send("Missing fields");
+    }
+
+    let tasks = [];
+    for (const t of req.body.tasks) {
+        tasks.push({ id: parseInt(t) });
+    }
+
+    await prisma.competition.update({
+        where: {
+            id: id
+        },
+        data: {
+            tasks: {
+                set: tasks
+            }
+        }
+    });
+
+    res.json({});
+})
 
 
 //RESULTS

@@ -2,6 +2,7 @@ import express from "express";
 import prisma from "../db.js";
 import { Authenticate, HashPassword } from "../authentication.js";
 export const adminRouter = express.Router();
+import { error_obj } from "../server.js";
 
 
 /**
@@ -10,8 +11,8 @@ export const adminRouter = express.Router();
 adminRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
     const rows = await prisma.user.findMany();
     res.status(200).json(rows);
-    if(rows == null) 
-    {
+    if (rows == null) {
+        error_obj = { err: 404 };
         return res.status(404);
     }
 
@@ -25,18 +26,120 @@ adminRouter.get("/group/:id", Authenticate(["ADMIN"]), async (req, res) => {
                 id: parseInt(req.params.id)
             }
         });
-    if(group == null) {
+    if (group == null) {
+        error_obj = { err: 404 }
         return res.status(404)
     }
     res.status(200).json(group);
 })
-adminRouter.get("/groups", Authenticate(["ADMIN"]), async (req, res) => {
+adminRouter.get("/groups", Authenticate(["ADMIN", "JUDGE"]), async (req, res) => {
     const groups = await prisma.group.findMany();
-    if(groups == null) 
-    {
+    if (groups == null) {
+        error_obj = { err: 404 };
         return res.status(404).send("Error");
     }
     res.json(groups)
+})
+adminRouter.delete("/groups/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const users = prisma.user.updateMany({
+        where: {
+            groupId: parseInt(req.params.id)
+        },
+        data: {
+            groupId: null
+        }
+    })
+    const group = await prisma.group.delete({
+        where: {
+            id: parseInt(req.params.id)
+        }
+    });
+    if (group == null) {
+        res.status(404).send("Requested group not found.");
+    }
+    res.status(200).json(group);
+})
+adminRouter.put("/groups/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.group.update(
+        {
+            where:
+            {
+                id: parseInt(req.params.id)
+            },
+            data:
+            {
+                name: req.body.name,
+                description: req.body.description
+            }
+        });
+    res.status(200).json(user);
+})
+adminRouter.post("/groups/:id/assign", Authenticate(["JUDGE"]), async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+        return res.status(404).send("Not found.");
+    }
+
+    if (req.body.competition == undefined) {
+        return res.status(400).send("Missing fields");
+    }
+
+    const competition = parseInt(req.body.competition);
+    if (isNaN(competition)) {
+        return res.status(400).send();
+    }
+
+    const group = await prisma.group.update({
+        where:
+        {
+            id: id
+        },
+        data: {
+            competitionId: competition
+        }
+    })
+
+    if (group == null) {
+        return res.status(404).send("Not found.");
+    }
+
+    res.json(group);
+})
+adminRouter.post("/groups/:id/unassign", Authenticate(["JUDGE"]), async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+        return res.status(404).send("Not found.");
+    }
+
+    const group = await prisma.group.update({
+        where:
+        {
+            id: id
+        },
+        data: {
+            competitionId: null
+        }
+    })
+
+    if (group == null) {
+        return res.status(404).send("Not found.");
+    }
+
+    res.json(group);
+})
+adminRouter.post("/groups/", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.group.create(
+        {
+            data:
+            {
+                name: req.body.name,
+                description: req.body.description,
+                competitionId: null
+            }
+        });
+    res.status(200).json(user);
 })
 adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
     let user
@@ -74,8 +177,9 @@ adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
                 }
             });
     }
-    if(!user) 
-    {
+
+    if (!user) {
+        error_obj = { err: 500 };
         return res.status(500).send("Internal server error");
 
     }
@@ -94,22 +198,22 @@ adminRouter.post("/:id", Authenticate(["ADMIN"]), async (req, res) => {
                 //TODO: rewrite manually
             }
         });
-    if(!user) 
-    {
+    if (!user) {
+        error_obj = { err: 500 };
         return res.status(500).send("Internal server error");
     }
     res.status(200).json(user);
 })
 
 
-adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) => 
-    {
-        const user = await prisma.user.delete({
-            where: {
-                id: parseInt(req.params.id)
-            }
-        });
+adminRouter.delete("/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.user.delete({
+        where: {
+            id: parseInt(req.params.id)
+        }
+    });
     if (user == null) {
+        error_obj = { err: 404 }
         return res.status(404).send("Requested user not found.");
     }
     res.status(200).json(user);

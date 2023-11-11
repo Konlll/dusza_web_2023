@@ -5,13 +5,18 @@ import {error_obj} from "../server.js";
 export const tasksRouter = express.Router();
 
 // Get all tasks
-tasksRouter.get("/", Authenticate(["TEACHER"]), async (req, res) => {
-    const tasks = await prisma.task.findMany();
+tasksRouter.get("/", Authenticate(["TEACHER", "JUDGE"]), async (req, res) => {
+    const grade = req.query.grade;
+    const tasks = await prisma.task.findMany({
+        where: grade ? { grade: parseInt(grade) } : {}
+    });
+    
     if(tasks == null) 
     {
         error_obj = {err: 404};
         return res.status(404).send("error");
     }
+
     res.json(tasks);
 })
 
