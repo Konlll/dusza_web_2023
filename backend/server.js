@@ -9,8 +9,11 @@ import { activityRouter } from "./routes/activity.js";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3000;
+const port =  process.env.PORT;
 
+//global error object
+let error_obj = {}
+export { error_obj } ;
 /* Middlewares */
 app.use(express.json());
 
@@ -25,6 +28,9 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
+app.get("/error", (req,res) => {
+        return res.json(error_obj);
+});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

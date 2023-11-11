@@ -1,5 +1,3 @@
-//ts@check
-"use strict";
 import { useRef } from "react";
 import '../styles/LoginRegister.css';
 import { useNavigate} from "react-router-dom";
@@ -33,7 +31,7 @@ const Login = () => {
                 localStorage.setItem("role", decoded.role);
                 navigate("/dashboard");
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.text()));
 
     }
     return (
