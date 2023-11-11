@@ -42,6 +42,52 @@ adminRouter.get("/groups", Authenticate(["ADMIN"]), async (req, res) => {
     }
     res.json(groups)
 })
+adminRouter.delete("/groups/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const users = prisma.user.updateMany({
+        where: {
+            groupId: parseInt(req.params.id)
+        },
+        data: {
+            groupId: null
+        }
+    })
+    const group = await prisma.group.delete({
+        where: {
+            id: parseInt(req.params.id)
+        }
+    });
+    if (group == null) {
+        res.status(404).send("Requested group not found.");
+    }
+    res.status(200).json(group);
+})
+adminRouter.put("/groups/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.group.update(
+        {
+            where:
+            {
+                id: parseInt(req.params.id)
+            },
+            data:
+            {
+                name: req.body.name,
+                description: req.body.description
+            }
+        });
+    res.status(200).json(user);
+})
+adminRouter.post("/groups/", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.group.create(
+        {
+            data:
+            {
+                name: req.body.name,
+                description: req.body.description,
+                competitionId: null
+            }
+        });
+    res.status(200).json(user);
+})
 adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
     let user
     if (req.body.password) {
@@ -108,13 +154,12 @@ adminRouter.post("/:id", Authenticate(["ADMIN"]), async (req, res) => {
 })
 
 
-adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) => 
-    {
-        const user = await prisma.user.delete({
-            where: {
-                id: parseInt(req.params.id)
-            }
-        });
+adminRouter.delete("/:id", Authenticate(["ADMIN"]), async (req, res) => {
+    const user = await prisma.user.delete({
+        where: {
+            id: parseInt(req.params.id)
+        }
+    });
     if (user == null) {
         error_obj = { err: 404}
         return res.status(404).send("Requested user not found.");
