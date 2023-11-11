@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-
 const IntroPage = () => {
-  const [introductionText, setIntroductionText] = useState('');
+  const [introductionText, setIntroductionText] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [isIntroductionSubmitted, setIsIntroductionSubmitted] = useState(false);
 
   const handleTextChange = (event) => {
-    setIntroductionText(event.target.value);
-  };
+      setIntroductionText(event.target.value);
+    };
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
