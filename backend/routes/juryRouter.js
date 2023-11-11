@@ -1,12 +1,12 @@
 import express from "express";
 import prisma from "../db.js";
-
+import {Authenticate} from "../authentication.js";
 export const juryRouter = express.Router();
 
 juryRouter.use(express.json());
 
 // get all competitions
-juryRouter.get("/", async (req, res) => 
+juryRouter.get("/", Authenticate(["JUDGE"]) ,async (req, res) => 
 {
    const rows = await prisma.competition.findMany();
    if(rows == null) 
@@ -17,7 +17,7 @@ juryRouter.get("/", async (req, res) =>
 });
 
 // get competition by id
-juryRouter.get("/competition/:id", async (req,res) => 
+juryRouter.get("/competition/:id", Authenticate(["JUDGE"]),async (req,res) => 
     {
         const competition = await prisma.competition.findFirst({
             where: 
@@ -33,7 +33,7 @@ juryRouter.get("/competition/:id", async (req,res) =>
     });
 
 //change the competition
-juryRouter.put("/competition/:id", async (req,res) => 
+juryRouter.put("/competition/:id", Authenticate(["JUDGE"]), async (req,res) => 
     {
       const competition = await prisma.competition.update(
           {
@@ -56,7 +56,7 @@ juryRouter.put("/competition/:id", async (req,res) =>
 
 })
 
-juryRouter.post("/competition", async (req, res) => 
+juryRouter.post("/competition",Authenticate(["JUDGE"]), async (req, res) => 
     {
         const new_competition =  await prisma.competition.create( 
             {
@@ -68,7 +68,7 @@ juryRouter.post("/competition", async (req, res) =>
 
     })
 
-juryRouter.delete("/competition/:id", async (req,res) => 
+juryRouter.delete("/competition/:id",Authenticate(["JUDGE"]), async (req,res) => 
     {
         const result = await prisma.competition.delete({
             where : {

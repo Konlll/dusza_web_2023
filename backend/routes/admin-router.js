@@ -1,5 +1,6 @@
 import express from "express";
 import primsa from "../db.js";
+import { Authenticate } from "../authentication.js";
 export const adminRouter = express.Router();
 
 
@@ -7,13 +8,13 @@ export const adminRouter = express.Router();
 /**
  * Gets all users (teachers, students, juries)
  */
-adminRouter.get("/", async (req,res) => {
+adminRouter.get("/", Authenticate(["ADMIN"]),async (req,res) => {
     const rows = await primsa.user.findMany();
     res.status(200).json(rows);
 
 });
 
-adminRouter.get("user/:id", async (req,res) => 
+adminRouter.get("user/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
         const user = await primsa.user.findFirst(
             {
@@ -28,7 +29,7 @@ adminRouter.get("user/:id", async (req,res) =>
         }
                 res.status(200).json(user);
     })
-adminRouter.put("user/:id", async (req,res) => 
+adminRouter.put("user/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
                 {
@@ -46,7 +47,7 @@ adminRouter.put("user/:id", async (req,res) =>
 
 
 
-adminRouter.post("user/", async (req,res) => 
+adminRouter.post("user/", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
                 {
@@ -64,7 +65,7 @@ adminRouter.post("user/", async (req,res) =>
 
 
 
-adminRouter.delete("/user/:id", async (req,res) => 
+adminRouter.delete("/user/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
         const user = await primsa.user.delete({
             where: {
