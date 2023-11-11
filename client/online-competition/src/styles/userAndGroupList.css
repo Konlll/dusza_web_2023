@@ -1,4 +1,4 @@
-.user-list, .group-list{
+.user-list, .group-list, .competition-list{
     margin: 70px auto;
     width: 70%;
 
@@ -55,14 +55,26 @@
             button:first-child{
                 background-color: var(--success-color);
             }
-            button:last-child{
+            button:nth-child(2){
                 background-color: var(--danger-color)
+            }
+            button:nth-child(3){
+                background-color: var(--primary-color)
+            }
+            button:nth-child(4){
+                background-color: var(--primary-color)
             }
             button:first-child:hover{
                 background-color: var(--success-hover-color);
             }
-            button:last-child:hover{
+            button:nth-child(2):hover{
                 background-color: var(--danger-hover-color);
+            }
+            button:nth-child(3):hover{
+                background-color: var(--primary-hover-color);
+            }
+            button:nth-child(4):hover{
+                background-color: var(--primary-hover-color);
             }
         }
     }

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
+import { FaPencilAlt, FaTrashAlt, FaClipboardList } from 'react-icons/fa'
+import { MdGroupAdd } from "react-icons/md";
+import '../styles/LoginRegister.css'
+import '../styles/Competitions.css'
+import { Link } from "react-router-dom";
 
 const Competitions = () => {
     const [competitions, setCompetitions] = useState(null);
@@ -75,15 +80,22 @@ const Competitions = () => {
     const FormatDate = (text) => text ? new Date(Date.parse(text)).toISOString().split('T')[0] : undefined;
 
     return (
-        <div>
-            <button onClick={() => setModalOpen(true)}>Új verseny</button>
+        <div className="competitions">
+            <button onClick={() => setModalOpen(true)} className="new-competition-button">Új verseny</button>
+            <div className="competition-header">
+                <div>Név</div>
+                <div>Leírás</div>
+                <div>Kezdődátum</div>
+                <div>Végdátum</div>
+                <div>Interakciók</div>
+            </div>
             {competitions ?
-                <ul>
+                <ul className="competition-list">
                     {competitions.map(comp => <Competition competition={comp} editFunction={EditCompetition} deleteFunction={HandleDelete} key={comp.id} />)}
                 </ul>
                 : "Loading..."}
             <Modal isOpen={modalOpen} onClose={CloseModal}>
-                <form key={editedCompetition?.id} onSubmit={SubmitForm}>
+                <form className="register-login-form add-new-competition" key={editedCompetition?.id} onSubmit={SubmitForm}>
                     <h2>{editedCompetition ? "Verseny szerkesztése" : "Új verseny"}</h2>
                     <input type="text" placeholder="Név" name="name" required defaultValue={editedCompetition?.name} />
                     <textarea name="description" placeholder="Leírás" defaultValue={editedCompetition?.description}></textarea>
@@ -99,14 +111,21 @@ const Competitions = () => {
 }
 
 const Competition = ({ competition, editFunction, deleteFunction }) => {
+    let startDate = new Date(competition.startDate)
+    let endDate = new Date(competition.endDate)
     return (
-        <li>
-            <span>{competition.name} {competition.startDate} {competition.endDate}</span>
+        <li className="user-row">
+            <div>{competition.name}</div>
+            <div>{competition.description}</div>
+            <div>{`${startDate.getFullYear()}-${startDate.getMonth() < 10 ? "0" + parseInt(startDate.getMonth() + 1) : startDate.getMonth() + 1}-${startDate.getDate() < 10 ? "0" + startDate.getDate() : startDate.getDate()}`}</div>
+            <div>{`${endDate.getFullYear()}-${endDate.getMonth() + 1 < 10 ? "0" + parseInt(endDate.getMonth() + 1) : endDate.getMonth() + 1}-${endDate.getDate() < 10 ? "0" + endDate.getDate() : endDate.getDate()}`}</div>
             {Date.parse(competition.startDate) > new Date() ?
                 <div>
-                    <button onClick={() => editFunction(competition)}>Szerkesztés</button>
-                    <button onClick={() => deleteFunction(competition)}>Törlés</button>
-                </div> : ""}
+                    <button onClick={() => editFunction(competition)}><FaPencilAlt /></button>
+                    <button onClick={() => deleteFunction(competition)}><FaTrashAlt /></button>
+                    <button title="Hozzárendelés csoporthoz"><Link to={`/competitions/${competition.id}/groups`}><MdGroupAdd /></Link></button>
+                    <button title="Hozzárendelés feladthoz"><Link to={`/competitions/${competition.id}/tasks`}><FaClipboardList /></Link></button>
+                </div> : <div></div>}
         </li>
     )
 }
