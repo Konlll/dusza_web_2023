@@ -2,7 +2,8 @@
 "use strict";
 import { useRef } from "react";
 import '../styles/LoginRegister.css';
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
     /** @type {React.MutableRefObject<string>} */
@@ -14,35 +15,37 @@ const Login = () => {
      */
     const HandleSubmit = (event) => {
         event.preventDefault()
-        fetch("/api/auth/login",  {
-            method : "POST",
-            headers: 
+        fetch("/api/auth/login", {
+            method: "POST",
+            headers:
             {
-                "Content-type" : "application/json"
+                "Content-type": "application/json"
             },
             body: JSON.stringify({
-                username : usernameRef.current,
-                password : passwordRef.current
+                username: usernameRef.current,
+                password: passwordRef.current
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            localStorage.setItem("access_token", data);
-            navigate("/dashboard");
-        })
-        .catch(err => console.log(err));
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem("access_token", data);
+                let decoded = jwtDecode(data);
+                localStorage.setItem("role", decoded.role);
+                navigate("/dashboard");
+            })
+            .catch(err => console.log(err));
     }
     return (
         <>
             <h1>Online Vetélkedő</h1>
-            <form  onSubmit={HandleSubmit}>
+            <form onSubmit={HandleSubmit}>
                 <h2>Jelentkezzen be!</h2>
-                <input type="text" ref={usernameRef}  onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév"/>
+                <input type="text" ref={usernameRef} onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév" />
                 <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} placeholder="Jelszó" />
                 <button type="submit">Bejelentkezés</button>
             </form>
         </>
     );
 }
- 
+
 export default Login;
