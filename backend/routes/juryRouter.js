@@ -76,3 +76,38 @@ juryRouter.delete("/:id",Authenticate(["JUDGE"]), async (req,res) =>
             }
         })
     });
+
+
+//RESULTS
+// Get all the results
+juryRouter.get("/results", Authenticate(["JUDGE"]), async (req, res) => {
+        const results = await prisma.result.aggregate(
+            {
+                _sum: 
+                {
+                    score: true
+                }
+            })
+        .findMany({
+            include :
+            {
+                competition:  
+                {
+                    select: 
+                    {
+                        grade: true,
+                        name: true,
+                        groups: true,
+
+                    }
+                }
+                
+            },
+          orderBy: 
+            {
+                time: true,
+                score : true
+            },
+        });
+        res.json(results);
+ })
