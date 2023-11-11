@@ -30,6 +30,7 @@ const Login = () => {
             .then(data => {
                 localStorage.setItem("access_token", data);
                 let decoded = jwtDecode(data);
+                localStorage.setItem("user_id", decoded.id);
                 localStorage.setItem("role", decoded.role);
                 navigate("/dashboard");
             })

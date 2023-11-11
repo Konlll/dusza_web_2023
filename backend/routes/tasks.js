@@ -40,6 +40,10 @@ tasksRouter.post("/upload", Authenticate(["TEACHER"]), async (req, res) => {
     let errors = [];
 
     for (const line of lines) {
+        if (line == "") {
+            continue;
+        }
+
         const fields = line.split(' ');
 
         if (fields.length != 5) {
@@ -79,18 +83,27 @@ tasksRouter.delete("/:id", Authenticate(["TEACHER"]), async (req, res) => {
         return res.status(404).send("Not found.");
     }
 
-    try {
-        await prisma.task.delete({
-            where: {
-                id: id
-            },
-        });
-    }
-    catch {
+    const task = await prisma.task.findUnique({
+        where: {
+            id: id
+        },
+    });
+
+    if (task == null) {
         return res.status(404).send("Not found.");
     }
 
-    res.send();
+    if (task.teacherId != req.user.id) {
+        return res.sendStatus(403);
+    }
+
+    await prisma.task.delete({
+        where: {
+            id: id
+        },
+    });
+
+    res.json({});
 })
 
 // Edit a task
@@ -114,8 +127,22 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
         return res.status(400).send();
     }
 
+    const task = await prisma.task.findUnique({
+        where: {
+            id: id
+        },
+    });
+
+    if (task == null) {
+        return res.status(404).send("Not found.");
+    }
+
+    if (task.teacherId != req.user.id) {
+        return res.sendStatus(403);
+    }
+
     try {
-        var task = await prisma.task.update({
+        var updatedTask = await prisma.task.update({
             where: {
                 id: id
             },
@@ -124,7 +151,7 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
                 word2: req.body.word2,
                 word3: req.body.word3,
                 word4: req.body.word4,
-                grade: req.body.grade
+                grade: grade
             }
         });
     }
@@ -132,5 +159,5 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
         return res.status(400).send();
     }
 
-    res.json(task);
+    res.json(updatedTask);
 })
