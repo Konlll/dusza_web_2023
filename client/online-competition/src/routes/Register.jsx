@@ -5,7 +5,7 @@ const Register = () => {
     const passwordRef = useRef(null)
     const roleRef = useRef(null)
     const gradeRef = useRef(null)
-    const groupRef = useRef(null)
+    const classRef = useRef(null)
 
     const competitorInfosRef = useRef(null)
     /** 
@@ -23,13 +23,11 @@ const Register = () => {
                 },
                 body: JSON.stringify(
                     {
-                        //TODO: implement searching group id by group name
-                        // group -> database - select where name == group return id
-                        username: usernameRef.current,
-                        password: passwordRef.current,
-                        role: roleRef.current,
-                        grade: gradeRef.current,
-                        group : groupRef.current
+                        username: usernameRef.current.value,
+                        password: passwordRef.current.value,
+                        role: roleRef.current.value,
+                        grade: parseInt(gradeRef.current.value) || null,
+                        class : classRef.current.value
                     })
             }).then(res => res.json()).then(data => console.log(data));
     }
@@ -41,7 +39,7 @@ const Register = () => {
         } else {
             div.className = "d-none"
             gradeRef.current.value = ""
-            groupRef.current.value = ""
+            classRef.current.value = ""
         }
     } 
 
@@ -59,7 +57,7 @@ const Register = () => {
             {/* Ha versenyző*/}
             <div className="d-none" ref={competitorInfosRef}>
                 <input ref={gradeRef} type="number" min={5} max={8} placeholder="Évfolyam" />
-                <input ref={groupRef} type="text" placeholder="Csoport" />
+                <input ref={classRef} type="text" placeholder="Osztály" />
             </div>
 
             <button type="submit">Regisztráció</button>
