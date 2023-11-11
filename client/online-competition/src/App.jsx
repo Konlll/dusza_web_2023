@@ -4,6 +4,7 @@ import Register from './routes/Register'
 import Dashboard from "./components/Dashboard";
 import Intro from "./routes/Intro";
 import IntroPage from "./components/CreateIntroduction";
+import ErrorPage from './components/Error';
 function App() {
   return (
     <>
@@ -14,6 +15,7 @@ function App() {
           <Route path='/dashboard' Component={ Dashboard} />
           <Route path='/intro' Component={ Intro} />
           <Route path='/create-intro' Component={IntroPage} />
+          <Route path='/error' Component={Error} />
         </Routes>
       </BrowserRouter>
     </>

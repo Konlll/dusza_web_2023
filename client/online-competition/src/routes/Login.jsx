@@ -27,8 +27,10 @@ const Login = () => {
         })
         .then(res => res.json())
         .then(data => {
-            localStorage.setItem("access_token", data);
-            navigate("/dashboard");
+             localStorage.setItem("access_token", data);
+                let decoded = jwtDecode(data);
+                localStorage.setItem("role", decoded.role);
+                navigate("/dashboard");
         })
         .catch(err => navigate("/error")));
     }
