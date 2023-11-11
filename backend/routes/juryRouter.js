@@ -45,6 +45,7 @@ juryRouter.put("/competition/:id", async (req,res) =>
               }
 
           }) 
+        //TODO: Rewrite this logic
         if(competition.startDate > Date.now()) 
         {
             res.status(403).send("Competition is already started, you cannot modify it.");
