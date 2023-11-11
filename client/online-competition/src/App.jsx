@@ -20,7 +20,8 @@ function App() {
           <Route path='/dashboard' Component={Dashboard} />
           <Route path='/intro' Component={Intro} />
           <Route path='/create-intro' Component={IntroPage} />
-          <Route path='/error' Component={Error} />
+          <Route path='/error' Component={ErrorPage} />
+          <Route path='*' element={<ErrorPage errorValue={404}/>} />
           <Route path='/activity' Component={Activity} />
           <Route path='/competitions' Component={Competitions} />
         </Routes>
