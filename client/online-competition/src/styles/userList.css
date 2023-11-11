@@ -1,0 +1,108 @@
+.user-list{
+    margin: 70px auto;
+    width: 70%;
+
+    .users-header{
+        display: flex;
+        margin-top: 15px;
+        justify-content: space-between;
+        background-color: var(--primary-color);
+        padding: 15px;
+        color: #fff;
+
+        div{
+            margin: auto;
+            width: calc(100% / 6);
+            text-align: center;
+        }
+    }
+
+    .user-row{
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+
+        div{
+            margin: auto;
+            width: calc(100% / 6);
+            text-align: center;
+
+            button{
+                width: 30px;
+                height: 30px;
+                border: none;
+                cursor: pointer;
+                color: #fff;
+                margin-left: 5px;
+                border-radius: 3px;
+            }
+
+            
+            button:first-child{
+                background-color: var(--success-color);
+            }
+            button:last-child{
+                background-color: var(--danger-color)
+            }
+            button:first-child:hover{
+                background-color: var(--success-hover-color);
+            }
+            button:last-child:hover{
+                background-color: var(--danger-hover-color);
+            }
+        }
+    }
+
+    .user-row:nth-child(even){
+        background-color: var(--secondary-color);
+        color: #fff
+    }
+    .user-row:nth-child(even):hover{
+        box-shadow: inset 0 0 100px 100px var(--secondary-hover-color);
+    }
+    .user-row:nth-child(odd){
+        color:#000;
+    }
+    .user-row:nth-child(odd):hover{
+        background-color: var(--white-hover-color);
+    }
+}
+
+.delete-buttons, .edit-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    button{
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        color: #fff;
+        margin-top: 15px;
+        font-size: 18px;
+    }
+    button:hover{
+        color: #fff !important;
+    }
+    button:first-child{
+        background-color: var(--success-color);
+    }
+    button:first-child:hover{
+        background-color: var(--success-hover-color);
+    }
+    button:last-child{
+        background-color: var(--danger-color);
+    }
+    button:last-child:hover{
+        background-color: var(--danger-hover-color);
+    }
+}
+
+.edit-user-form{
+    background-color: var(--secondary-color) !important;
+}
+
+.w-500{
+    max-width: 500px;
+}

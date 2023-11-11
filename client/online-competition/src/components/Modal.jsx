@@ -4,6 +4,7 @@ import "../styles/Modal.css"
 const Modal = ({
     isOpen,
     onClose,
+    parentState,
     children
 }) => {
     const [isModalOpen, setModalOpen] = useState(isOpen);
@@ -11,7 +12,7 @@ const Modal = ({
 
     const handleCloseModal = () => {
         if (onClose) {
-            onClose();
+            onClose(false);
         }
         setModalOpen(false);
     };

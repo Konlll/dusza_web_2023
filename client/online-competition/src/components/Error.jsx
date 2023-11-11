@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 
 
 const ErrorPage = () => 
-{   useEffect({
+{   /*useEffect({
         const fetchError = async () => 
             {
             await fetch("/api/error")
@@ -11,7 +11,7 @@ const ErrorPage = () =>
             .catch(error => setError(error));
             }
        fetchError()}
-    ,[])
+    ,[])*/
     const [error, setError] = useState("")
     return (
         <>

@@ -28,7 +28,7 @@ authRouter.post("/login", async (req, res) => {
         res.json(token);
 
         //store this token in local storage
-        localStorage.setItem("access_token", token)
+        //localStorage.setItem("access_token", token)
     } else {
         return res.status(401).send({ err: "Incorrect password or username" });
     }
