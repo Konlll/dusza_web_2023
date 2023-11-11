@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Online vetélkedő</title>
+    <meta name="description" content=""/>
+    <title></title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+  <script>
+       document.title = localStorage.getItem("title") || "Online vetélkedő"
+       document.querySelector('meta[name="description"]').setAttribute("content", localStorage.getItem("desc") || "Online vetélkedő iskolásoknak" );
+      
+  </script>
   </body>
 </html>

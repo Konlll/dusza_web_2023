@@ -17,7 +17,7 @@ juryRouter.get("/", Authenticate(["JUDGE"]) ,async (req, res) =>
 });
 
 // get competition by id
-juryRouter.get("/competition/:id", Authenticate(["JUDGE"]),async (req,res) => 
+juryRouter.get("/:id", Authenticate(["JUDGE"]),async (req,res) => 
     {
         const competition = await prisma.competition.findFirst({
             where: 
@@ -33,7 +33,7 @@ juryRouter.get("/competition/:id", Authenticate(["JUDGE"]),async (req,res) =>
     });
 
 //change the competition
-juryRouter.put("/competition/:id", Authenticate(["JUDGE"]), async (req,res) => 
+juryRouter.put("/:id", Authenticate(["JUDGE"]), async (req,res) => 
     {
       const competition = await prisma.competition.update(
           {
@@ -56,7 +56,7 @@ juryRouter.put("/competition/:id", Authenticate(["JUDGE"]), async (req,res) =>
 
 })
 
-juryRouter.post("/competition",Authenticate(["JUDGE"]), async (req, res) => 
+juryRouter.post("/",Authenticate(["JUDGE"]), async (req, res) => 
     {
         const new_competition =  await prisma.competition.create( 
             {
@@ -68,7 +68,7 @@ juryRouter.post("/competition",Authenticate(["JUDGE"]), async (req, res) =>
 
     })
 
-juryRouter.delete("/competition/:id",Authenticate(["JUDGE"]), async (req,res) => 
+juryRouter.delete("/:id",Authenticate(["JUDGE"]), async (req,res) => 
     {
         const result = await prisma.competition.delete({
             where : {

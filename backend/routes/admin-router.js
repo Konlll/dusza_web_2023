@@ -14,7 +14,7 @@ adminRouter.get("/", Authenticate(["ADMIN"]),async (req,res) => {
 
 });
 
-adminRouter.get("user/:id", Authenticate(["ADMIN"]),async (req,res) => 
+adminRouter.get("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
         const user = await prisma.user.findFirst(
             {
@@ -29,7 +29,7 @@ adminRouter.get("user/:id", Authenticate(["ADMIN"]),async (req,res) =>
         }
                 res.status(200).json(user);
     })
-adminRouter.put("user/:id", Authenticate(["ADMIN"]),async (req,res) => 
+adminRouter.put("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
                 {
@@ -47,7 +47,7 @@ adminRouter.put("user/:id", Authenticate(["ADMIN"]),async (req,res) =>
 
 
 
-adminRouter.post("user/", Authenticate(["ADMIN"]),async (req,res) => 
+adminRouter.post("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
                 {
@@ -65,7 +65,7 @@ adminRouter.post("user/", Authenticate(["ADMIN"]),async (req,res) =>
 
 
 
-adminRouter.delete("/user/:id", Authenticate(["ADMIN"]),async (req,res) => 
+adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
         const user = await prisma.user.delete({
             where: {
