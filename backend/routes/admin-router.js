@@ -29,6 +29,17 @@ adminRouter.get("/:id", Authenticate(["ADMIN"]),async (req,res) =>
         }
                 res.status(200).json(user);
     })
+adminRouter.get("group/:id", Authenticate(["ADMIN"]), async (req, res) => 
+    {
+        const group = await prisma.group.findFirst(
+            {
+                where: 
+                {
+                    id: req.params.id
+                }
+            });
+        res.status(200).json(group);
+    })
 adminRouter.put("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
