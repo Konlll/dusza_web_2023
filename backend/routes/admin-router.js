@@ -20,7 +20,7 @@ adminRouter.get("/:id", Authenticate(["ADMIN"]),async (req,res) =>
             {
                 where: 
                 {
-                    id: req.params.id
+                    id: parseInt(req.params.id)
                 }
             });
         if(user == null) 
@@ -35,7 +35,7 @@ adminRouter.get("group/:id", Authenticate(["ADMIN"]), async (req, res) =>
             {
                 where: 
                 {
-                    id: req.params.id
+                    id: parseInt(parseIntreq.params.id)
                 }
             });
         res.status(200).json(group);
@@ -69,7 +69,7 @@ adminRouter.post("/:id", Authenticate(["ADMIN"]),async (req,res) =>
                 {
                     where: 
                     {
-                        id: req.params.id
+                        id: parseInt(req.params.id)
                     },
                     data: 
                     {
@@ -85,7 +85,7 @@ adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) =>
     {
         const user = await prisma.user.delete({
             where: {
-                id: req.params.id
+                id: parseInt(req.params.id)
             }
         });
        res.status(200).send(`Successfully deleted user with ID:  ${req.params.id}`);

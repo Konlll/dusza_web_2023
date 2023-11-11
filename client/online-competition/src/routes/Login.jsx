@@ -38,8 +38,8 @@ const Login = () => {
     }
     return (
         <>
-            <h1>Online Vetélkedő</h1>
-            <form onSubmit={HandleSubmit}>
+            <h1 className="login-h1">Online Vetélkedő</h1>
+            <form className="register-login-form" onSubmit={HandleSubmit}>
                 <h2>Jelentkezzen be!</h2>
                 <input type="text" ref={usernameRef} onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév" />
                 <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} placeholder="Jelszó" />
