@@ -10,8 +10,8 @@ export function HashPassword(password) {
     return createHmac('sha256', secret).update(password).digest('hex');
 }
 
-export function GenerateToken(id) {
-    return jwt.sign({ id: id }, secret);
+export function GenerateToken(user) {
+    return jwt.sign({ id: user.id, role: user.role }, secret);
 }
 
 export const Authenticate = (roles) => {
