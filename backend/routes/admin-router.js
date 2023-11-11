@@ -1,5 +1,5 @@
 import express from "express";
-import primsa from "../db.js";
+import prisma from "../db.js";
 import { Authenticate } from "../authentication.js";
 export const adminRouter = express.Router();
 
@@ -9,14 +9,14 @@ export const adminRouter = express.Router();
  * Gets all users (teachers, students, juries)
  */
 adminRouter.get("/", Authenticate(["ADMIN"]),async (req,res) => {
-    const rows = await primsa.user.findMany();
+    const rows = await prisma.user.findMany();
     res.status(200).json(rows);
 
 });
 
 adminRouter.get("user/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
-        const user = await primsa.user.findFirst(
+        const user = await prisma.user.findFirst(
             {
                 where: 
                 {
@@ -67,7 +67,7 @@ adminRouter.post("user/", Authenticate(["ADMIN"]),async (req,res) =>
 
 adminRouter.delete("/user/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
-        const user = await primsa.user.delete({
+        const user = await prisma.user.delete({
             where: {
                 id: req.params.id
             }
