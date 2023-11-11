@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import '../styles/userList.css'
+import '../styles/userAndGroupList.css'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
+import { BsPlusSquareFill } from 'react-icons/bs'
 import Modal from "./Modal";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserList = () => {
     const [users, setUsers] = useState([])
@@ -121,30 +123,40 @@ const UserList = () => {
     }
 
     useEffect(() => {
-        fetch("/api/admin/", {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
+        if(localStorage.getItem("access_token") && localStorage.getItem("role") == "ADMIN"){
+            fetch("/api/admin/", {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("access_token")}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => setUsers(data))
+                .catch(err => console.log(err))
+            
+            fetch("/api/admin/groups/", {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem("access_token")}`
+                }
+            })
             .then(res => res.json())
-            .then(data => setUsers(data))
-            .catch(err => console.log(err))
-        
-        fetch("/api/admin/groups/", {
-            method: "GET",
-            headers: {
-                authorization: `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => setGroups(data))
-        .catch(error => console.log(error))
+            .then(data => setGroups(data))
+            .catch(error => console.log(error))
+        } else{
+            const navigate = useNavigate()
+            navigate('/')
+        }
     }, [users])
 
     return (
         <div className="user-list">
-            <h1>Felhasználók</h1>
+            <div className="title">
+                <h1>Felhasználók</h1>
+                <span>
+                    <Link to='/register'><BsPlusSquareFill /></Link>
+                </span>
+            </div>
             <div className="users-table">
                 <div className="users-header">
                     <div>Felhasználónév</div>
@@ -212,6 +224,7 @@ const UserList = () => {
                             <input type="text" value={editClass && editClass} onChange={(e) => setEditClass(e.target.value)} placeholder="Osztály" />
                             <input type="number" value={editGrade && editGrade} onChange={(e) => setEditGrade(e.target.value)} min={5} max={8} placeholder="Évfolyam" />
                             <select onChange={(e) => setEditGroup(e.target.value)} value={editGroup && editGroup}>
+                                <option>Válasszon!</option>
                                 {groups.map(group => {
                                     return(
                                         <option key={group.id} value={parseInt(group.id)}>{group.name}</option>

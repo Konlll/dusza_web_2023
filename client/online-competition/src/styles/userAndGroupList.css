@@ -1,6 +1,20 @@
-.user-list{
+.user-list, .group-list{
     margin: 70px auto;
     width: 70%;
+
+    .title{
+        display: flex;
+        align-items: flex-end;
+
+        span{
+            margin-left: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            a{
+                color: #000;
+            }
+        }
+    }
 
     .users-header{
         display: flex;
