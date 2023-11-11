@@ -67,8 +67,6 @@ adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
     res.status(200).json(user);
 })
 
-
-
 adminRouter.post("/:id", Authenticate(["ADMIN"]), async (req, res) => {
     const user = prisma.user.update(
         {
@@ -85,20 +83,10 @@ adminRouter.post("/:id", Authenticate(["ADMIN"]), async (req, res) => {
 })
 
 
-
-adminRouter.delete("/:id", Authenticate(["ADMIN"]), async (req, res) => {
-    const user = await prisma.user.delete({
-        where: {
-            id: parseInt(req.params.id)
-        }
-    });
-    res.status(200).send(`Successfully deleted user with ID:  ${req.params.id}`);
-})
-adminRouter.get("/:id", Authenticate(["ADMIN"]), async (req, res) => {
-    const user = await prisma.user.findFirst(
-        {
-            where:
-            {
+adminRouter.delete("/:id", Authenticate(["ADMIN"]),async (req,res) => 
+    {
+        const user = await prisma.user.delete({
+            where: {
                 id: parseInt(req.params.id)
             }
         });
