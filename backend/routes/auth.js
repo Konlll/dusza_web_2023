@@ -23,7 +23,8 @@ authRouter.post("/login", async (req, res) => {
 
     if (user != null) {
         const token = GenerateToken(user);
-        return res.json(token);
+        res.json(token);
+
     } else {
         return res.status(401).send({ err: "Incorrect password or username" });
     }

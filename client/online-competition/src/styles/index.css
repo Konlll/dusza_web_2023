@@ -3,6 +3,12 @@
 :root {
     --primary-color: #34495E;
     --secondary-color: #3498DB;
+    --secondary-hover-color: rgba(255, 255, 255, 0.3);
+    --success-color: green;
+    --success-hover-color: rgb(0,100,0);
+    --danger-color: rgb(255, 60, 0);
+    --danger-hover-color: rgb(210,60,0);
+    --white-hover-color: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -19,6 +25,16 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .d-none{

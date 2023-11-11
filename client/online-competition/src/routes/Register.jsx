@@ -44,7 +44,7 @@ const Register = () => {
     } 
 
     return (
-        <form onSubmit={handleRegister}>
+        <form className="register-login-form" onSubmit={handleRegister}>
             <h2>Felhasználó regisztrálása</h2>
             <input ref={usernameRef} type="text" placeholder="Felhasználónév" />
             <input ref={passwordRef} type="password" placeholder="Jelszó" />

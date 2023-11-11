@@ -92,7 +92,7 @@ juryRouter.get("/results", Authenticate(["JUDGE"]), async (req, res) => {
             include :
             {
                 competition:  
-                    {
+                {
                     select: 
                     {
                         grade: true,
@@ -109,5 +109,5 @@ juryRouter.get("/results", Authenticate(["JUDGE"]), async (req, res) => {
                 score : true
             },
         });
-        res.status(200).json(results);
+        res.json(results);
  })
