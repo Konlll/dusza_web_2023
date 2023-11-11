@@ -3,12 +3,16 @@ import "../styles/Modal.css"
 
 const Modal = ({
     isOpen,
+    onClose,
     children
 }) => {
     const [isModalOpen, setModalOpen] = useState(isOpen);
     const modalRef = useRef(null);
 
     const handleCloseModal = () => {
+        if (onClose) {
+            onClose();
+        }
         setModalOpen(false);
     };
 
