@@ -25,7 +25,7 @@ export const Authenticate = (roles) => {
 
             jwt.verify(token, secret, async (err, payload) => {
                 if (err) {
-                    error_obj = {err : 403};
+                    error_obj.err = 403; 
                     return res.sendStatus(403);
                 }
 
@@ -36,7 +36,7 @@ export const Authenticate = (roles) => {
                 })
 
                 if (user == null || !roles.includes(user.role)) {
-                    error_obj = {err : 403};
+                    error_obj.err = 403;
                     return res.sendStatus(403);
                 }
 
@@ -44,7 +44,7 @@ export const Authenticate = (roles) => {
                 next();
             });
         } else {
-            error_obj = {err : 401};
+            error_obj.err = 401;
             return res.sendStatus(401);
         }
     };

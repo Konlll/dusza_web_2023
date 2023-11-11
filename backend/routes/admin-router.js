@@ -177,6 +177,7 @@ adminRouter.put("/:id", Authenticate(["ADMIN"]), async (req, res) => {
                 }
             });
     }
+
     if (!user) {
         error_obj = { err: 500 };
         return res.status(500).send("Internal server error");

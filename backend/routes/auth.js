@@ -1,5 +1,6 @@
 import express from "express";
 import prisma from "../db.js";
+import { error_obj } from "../server.js";
 import { HashPassword, GenerateToken } from "../authentication.js";
 import jwt from "jsonwebtoken";
 export const authRouter = express.Router();
@@ -8,7 +9,8 @@ authRouter.use(express.json())
 authRouter.post("/login", async (req, res) => {
     const { username, password } = req.body;
     if (username == undefined || password == undefined) {
-        return res.status(400).send("invalid username or password");
+        error_obj.err = 400;
+        return res.status(400);
     }
     const passwordHash = HashPassword(req.body.password)
 
@@ -26,6 +28,7 @@ authRouter.post("/login", async (req, res) => {
         res.json(token);
 
     } else {
+        error_obj.err = 401;
         return res.status(401).send({ err: "Incorrect password or username" });
     }
 })
@@ -33,6 +36,7 @@ authRouter.post("/login", async (req, res) => {
 authRouter.post("/register", async (req, res) => {
     const { username, password, role } = req.body;
     if (username == undefined || password == undefined || role == undefined) {
+        error_obj.err = 400;
         return res.status(400).send();
     }
 

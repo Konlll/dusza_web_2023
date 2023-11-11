@@ -31,7 +31,7 @@ const Login = () => {
                 localStorage.setItem("role", decoded.role);
                 navigate("/dashboard");
         })
-        .catch(err => console.log(err.text()));
+        .catch(err => navigate("/error"));
 
     }
     return (
