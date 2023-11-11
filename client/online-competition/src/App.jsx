@@ -8,6 +8,7 @@ import IntroPage from "./components/CreateIntroduction";
 import ErrorPage from './components/Error';
 import Activity from './routes/Activity';
 import Competitions from './routes/Competitions';
+import AssignTasks from './routes/AssignTasks';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/create-intro' Component={IntroPage} />
           <Route path='/error' Component={Error} />
           <Route path='/activity' Component={Activity} />
+          <Route path='/competitions/:id/tasks' Component={AssignTasks} />
           <Route path='/competitions' Component={Competitions} />
         </Routes>
       </BrowserRouter>
