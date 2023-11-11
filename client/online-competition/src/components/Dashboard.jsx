@@ -5,6 +5,7 @@
 
 import {useEffect, useState} from "react";
 import UserList from "./UserList";
+import Header from "./Header";
 
 const Dashboard = () => 
 {
@@ -20,6 +21,7 @@ const Dashboard = () =>
    
     return (
         <>
+            <Header/>
             {authentication == "ADMIN" && <UserList />}
         </>
     );
