@@ -4,7 +4,7 @@ import { adminRouter } from "./routes/admin-router.js";
 import { tasksRouter } from "./routes/tasks.js";
 import { userActionRouter } from "./routes/user-action.js";
 import { authRouter } from "./routes/auth.js";
-import { juryRouter } from "./routes/juryRouter.js";
+import { competitionRouter } from "./routes/competitions.js";
 import { activityRouter } from "./routes/activity.js";
 
 dotenv.config();
@@ -22,7 +22,7 @@ app.use('/admin', adminRouter);
 app.use("/tasks", tasksRouter);
 app.use('/user', userActionRouter)
 app.use("/auth", authRouter);
-app.use("/jury", juryRouter);
+app.use("/competitions", competitionRouter);
 app.use("/activity", activityRouter);
 app.get('/', (req, res) => {
   res.send('Hello World');

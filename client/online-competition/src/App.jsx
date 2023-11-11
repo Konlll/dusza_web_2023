@@ -7,6 +7,7 @@ import Intro from "./routes/Intro";
 import IntroPage from "./components/CreateIntroduction";
 import ErrorPage from './components/Error';
 import Activity from './routes/Activity';
+import Competitions from './routes/Competitions';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/error' Component={ErrorPage} />
           <Route path='*' element={<ErrorPage errorValue={404}/>} />
           <Route path='/activity' Component={Activity} />
+          <Route path='/competitions' Component={Competitions} />
         </Routes>
       </BrowserRouter>
     </>
