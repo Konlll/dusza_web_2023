@@ -2,9 +2,8 @@
 "use strict";
 import { useRef } from "react";
 import '../styles/LoginRegister.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
 const Login = () => {
     /** @type {React.MutableRefObject<string>} */
     const usernameRef = useRef("");
@@ -26,14 +25,15 @@ const Login = () => {
                 password: passwordRef.current
             })
         })
-            .then(res => res.json())
-            .then(data => {
-                localStorage.setItem("access_token", data);
+        .then(res => res.json())
+        .then(data => {
+             localStorage.setItem("access_token", data);
                 let decoded = jwtDecode(data);
                 localStorage.setItem("role", decoded.role);
                 navigate("/dashboard");
-            })
-            .catch(err => console.log(err));
+        })
+        .catch(err => navigate("/error")));
+
     }
     return (
         <>

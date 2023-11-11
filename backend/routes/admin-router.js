@@ -40,6 +40,11 @@ adminRouter.get("group/:id", Authenticate(["ADMIN"]), async (req, res) =>
             });
         res.status(200).json(group);
     })
+adminRouter.get("/groups", Authenticate(["ADMIN"]), async (req,res) => 
+    {
+        const groups = await prisma.group.findMany();
+        return groups;
+    })
 adminRouter.put("/:id", Authenticate(["ADMIN"]),async (req,res) => 
     {
             const user = prisma.user.update( 
