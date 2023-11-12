@@ -1,9 +1,7 @@
 import express from "express";
 import prisma from "../db.js"
-import fileupload from "express-fileupload";
 import {error_obj} from "../server.js";
 export const introRouter = express.Router();
-introRouter.use(fileupload({createParentPath : true}))
 introRouter.get("/", async (req,res) => 
     {
         const introduction_details = await prisma.intro.findFirst();
@@ -14,7 +12,7 @@ introRouter.get("/", async (req,res) =>
         }
         return res.status(200).json(introduction_details);
     });
-introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res) => 
+introRouter.put("/update",async (req,res) => 
     {
         const {text} = req.body
         const updated_intro = await prisma.intro.update(
