@@ -1,0 +1,14 @@
+# /etc/systemd/system/backend.service
+[Unit]
+Description=Online Competition backend
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /var/www/backend/server.js
+Restart=always
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/backend
+
+[Install]
+WantedBy=multi-user.target
