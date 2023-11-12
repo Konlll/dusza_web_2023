@@ -51,8 +51,8 @@ model Task {
   word3        String
   word4        String
   grade        Int
-  teacherId    Int
-  teacher      User          @relation(fields: [teacherId], references: [id])
+  teacherId    Int?
+  teacher      User?         @relation(fields: [teacherId], references: [id])
   competitions Competition[]
 
   @@unique([word1, word2, word3, word4, grade])

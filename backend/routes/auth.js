@@ -1,11 +1,14 @@
 import express from "express";
+import { Authenticate, GenerateToken, HashPassword } from "../authentication.js";
 import prisma from "../db.js";
 import { error_obj } from "../server.js";
-import { HashPassword, GenerateToken } from "../authentication.js";
-import jwt from "jsonwebtoken";
 export const authRouter = express.Router();
 
 authRouter.use(express.json())
+
+/**
+ * Log in.
+ */
 authRouter.post("/login", async (req, res) => {
     const { username, password } = req.body;
     if (username == undefined || password == undefined) {
@@ -33,7 +36,10 @@ authRouter.post("/login", async (req, res) => {
     }
 })
 
-authRouter.post("/register", async (req, res) => {
+/**
+ * Register a new user.
+ */
+authRouter.post("/register", Authenticate(["ADMIN"]), async (req, res) => {
     const { username, password, role } = req.body;
     if (username == undefined || password == undefined || role == undefined) {
         error_obj.err = 400;
@@ -51,10 +57,5 @@ authRouter.post("/register", async (req, res) => {
             class: req.body.class || null
         }
     });
-
-    /*
-        const token = GenerateToken(user);
-        res.json({ token });
-    */
     res.status(200).json({ message: `successfully created user with there params: ${username}, ${password}, ${role}` });
 });

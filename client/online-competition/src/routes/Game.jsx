@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from "react";
 import '../styles/Game.css'
 import { FormatSeconds } from "../utils.js";
+import { FetchData } from "../custom_hooks/getUsers.js";
 
 const Game = () => {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
 
+    /**
+     * Get the user's and competition's data.
+     */
     useEffect(() => {
-        fetch(`/api/game`, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-            .then(res => res.json())
+        FetchData("/api/game", "GET",)
+
             .then(data => {
                 if (data.error) {
                     setError(data.error)
                 } else {
                     setUserData(data)
                 }
-            })
-            .catch(err => console.log(err));
+            });
     }, []);
 
     const startDate = () => new Date(Date.parse(userData.startDate));
@@ -54,20 +53,20 @@ const QuestionManager = ({ endDate }) => {
 
     const [time, setTime] = useState(0);
 
+    /**
+     * Fetches the list of questions.
+     */
     useEffect(() => {
-        fetch(`/api/game/questions`, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-            .then(res => res.json())
+        FetchData("/api/game/questions", "GET", {})
             .then(data => {
                 setQuestions(data);
                 setAnswers(Array(data.length).fill(""));
-            })
-            .catch(err => console.log(err));
+            });
     }, []);
 
+    /**
+     * Start a timer to measure the elapsed time.
+     */
     useEffect(() => {
         const timer = setTimeout(() => {
             setTime(time + 1);
@@ -76,42 +75,46 @@ const QuestionManager = ({ endDate }) => {
         return () => clearTimeout(timer);
     }, [time]);
 
+    /**
+     * Save the answer when edited
+     * @param {Event} e 
+     */
     const HandleChange = (e) => {
         let newAnswers = [...answers];
         newAnswers[questionIndex] = e.target.value;
         setAnswers(newAnswers);
     }
 
+    /**
+     * Switch to the next question, or submit answers.
+     */
     const Next = () => {
         if (questionIndex == questions.length - 1) {
-            fetch(`/api/game/submit`, {
-                method: "POST",
-                headers:
-                {
-                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    answers: answers.map((x, i) => ({ id: questions[i].id, answer: x })),
-                    time: time
-                })
+            FetchData("/api/game/submit", "POST", {
+                answers: answers.map((x, i) => ({ id: questions[i].id, answer: x })),
+                time: time
             })
-                .then(res => res.json())
                 .then(data => {
                     setSubmitResults(data);
-                })
-                .catch(err => console.log(err));
+                });
         } else {
             setQuestionIndex(questionIndex + 1);
         }
     }
 
+    /**
+     * Switch to the previous question.
+     */
     const Prev = () => {
         if (questionIndex != 0) {
             setQuestionIndex(questionIndex - 1);
         }
     }
 
+    /**
+     * Calculate the time left until the end of the competition.
+     * @returns 
+     */
     const TimeLeft = () => {
         const total = Math.floor((endDate - new Date()) / 1000);
         return FormatSeconds(total);

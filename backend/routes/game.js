@@ -4,6 +4,9 @@ import { Authenticate } from "../authentication.js";
 
 export const gameRouter = express.Router();
 
+/**
+ * Get data about the user and the competition.
+ */
 gameRouter.get("/", Authenticate(["STUDENT"]), async (req, res) => {
     const data = await prisma.user.findUnique({
         where: {
@@ -38,6 +41,11 @@ gameRouter.get("/", Authenticate(["STUDENT"]), async (req, res) => {
     });
 })
 
+/**
+ * Gets the tasks assigned to the current user.
+ * @param {Object} user 
+ * @returns 
+ */
 const GetUserTasks = async (user) => {
     const teamMembers = await prisma.user.findMany({
         where: {
@@ -78,6 +86,9 @@ const shuffle = (arr) => {
     }
 };
 
+/**
+ * Get the tasks belonging to the current user, and scramble them.
+ */
 gameRouter.get("/questions", Authenticate(["STUDENT"]), async (req, res) => {
     const tasks = await GetUserTasks(req.user);
 
@@ -85,7 +96,6 @@ gameRouter.get("/questions", Authenticate(["STUDENT"]), async (req, res) => {
     for (const task of tasks) {
         let word = task.word4.toUpperCase().split("");
         shuffle(word);
-        // TODO: extra ellenőrzések
         scrambled.push({
             id: task.id,
             hints: [task.word1, task.word2, task.word3],
@@ -96,6 +106,9 @@ gameRouter.get("/questions", Authenticate(["STUDENT"]), async (req, res) => {
     return res.json(scrambled);
 })
 
+/**
+ * Submit and validate answers.
+ */
 gameRouter.post("/submit", Authenticate(["STUDENT"]), async (req, res) => {
     if (req.body.answers == undefined || req.body.time == undefined) {
         return res.status(400).send("Missing fields");
