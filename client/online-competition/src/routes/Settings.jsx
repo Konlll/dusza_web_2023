@@ -4,12 +4,14 @@ import '../styles/Settings.css'
 const Settings = () => {
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
+    const [files, setFiles] = useState([])
 
+    const handleImageUpload = (e) => {
+        setFiles(e.target.files)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(title)
-        console.log(desc)
         fetch('/api/settings', {
             method: "PUT",
             headers: {
@@ -23,7 +25,6 @@ const Settings = () => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
             document.title = title
             let x = window.open("", "myWindow", "toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=10, height=10, visible=none")
             x.localStorage.setItem("desc", data.desc)
@@ -53,7 +54,7 @@ const Settings = () => {
             <form action="PUT">
                 <input type="text" placeholder="A weboldal új neve" onChange={(e) => setTitle(e.target.value)} value={title || ""} />
                 <input type="text" placeholder="A weboldal új leírása" onChange={(e) => setDesc(e.target.value)} value={desc || ""} />
-                <input type="file" accept=".png, .jpg, .jpeg, .ico" />
+                <input type="file" accept=".png, .jpg, .jpeg, .ico" onChange={(e) => handleImageUpload(e)} />
                 <button onClick={(e) => handleSubmit(e)}>Bevitel</button>
             </form>
         </div>
