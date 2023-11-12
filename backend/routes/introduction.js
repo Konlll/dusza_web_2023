@@ -1,7 +1,7 @@
 import express from "express";
 import prisma from "../db.js"
 import multer from "multer";
-import path from "path"
+import path from "path";
 export const introRouter = express.Router();
 const storage = multer.diskStorage(
     {
