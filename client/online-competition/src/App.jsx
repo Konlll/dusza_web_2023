@@ -12,6 +12,7 @@ import NewGroup from './routes/NewGroup';
 import Competitions from './routes/Competitions';
 import AssignTasks from './routes/AssignTasks';
 import AssignGroups from './routes/AssignGroups';
+import Game from './routes/Game';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path='/competitions/:id/tasks' Component={AssignTasks} />
           <Route path='/competitions/:id/groups' Component={AssignGroups} />
           <Route path='/competitions' Component={Competitions} />
+          <Route path='/game' Component={Game} />
         </Routes>
       </BrowserRouter>
     </>
