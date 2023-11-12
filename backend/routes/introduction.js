@@ -9,6 +9,7 @@ introRouter.get("/", async (req,res) =>
         const introduction_details = await prisma.intro.findFirst();
         if (introduction_details == null) 
         {
+            error_obj.err = 404;
             return res.status(404);
         }
         return res.status(200).json(introduction_details);
@@ -17,6 +18,10 @@ introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res)
     {
         const updated_intro = await prisma.intro.update(
             {
+                where: 
+                {
+                    id : 1
+                },
                 data: 
                 {
                     text : req.body.text
