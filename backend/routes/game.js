@@ -14,7 +14,8 @@ gameRouter.get("/", Authenticate(["STUDENT"]), async (req, res) => {
                 include: {
                     competition: true
                 }
-            }
+            },
+            results: true
         }
     });
 
@@ -24,9 +25,11 @@ gameRouter.get("/", Authenticate(["STUDENT"]), async (req, res) => {
     }
     else if (!data.group.competition) {
         error = "A csapatod nem vesz részt egy versenybe sem.";
+    } else if (data.results.find(x => x.competitionId == data.group.competition.id)) {
+        error = "Már kitöltötted ennek a versenynek a feladatait.";
     }
 
-    res.json(error ? { error: error } : {
+    return res.json(error ? { error: error } : {
         username: data.username,
         groupName: data.group.name,
         competitionName: data.group.competition.name,
@@ -90,10 +93,54 @@ gameRouter.get("/questions", Authenticate(["STUDENT"]), async (req, res) => {
         });
     }
 
-    res.json(scrambled);
+    return res.json(scrambled);
 })
 
 gameRouter.post("/submit", Authenticate(["STUDENT"]), async (req, res) => {
-    console.log(req.body);
-    res.json({ minutes: Math.ceil(req.body.time / 60) });
+    if (req.body.answers == undefined || req.body.time == undefined) {
+        return res.status(400).send("Missing fields");
+    }
+
+    const time = parseInt(req.body.time);
+    if (isNaN(time)) {
+        return res.status(400).send();
+    }
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            group: {
+                include: {
+                    competition: true
+                }
+            }
+        }
+    });
+    const competitionId = user.group.competition.id;
+
+    const tasks = await GetUserTasks(req.user);
+    let correct = 0;
+    for (const task of tasks) {
+        const answer = req.body.answers.find(x => x.id == task.id) || null;
+        if (task.word4.toLowerCase().trim() == answer.answer.toLowerCase().trim()) {
+            correct++;
+        }
+    }
+
+    try {
+        const result = await prisma.result.create({
+            data: {
+                competitionId: competitionId,
+                userId: req.user.id,
+                score: correct,
+                time: time
+            }
+        });
+    } catch {
+        return res.status(400).send();
+    }
+
+    return res.json({ minutes: Math.ceil(req.body.time / 60) });
 })
