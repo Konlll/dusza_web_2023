@@ -1,0 +1,49 @@
+.activity{
+    margin-top: 25px;
+
+    .bar{
+        width: 900px;
+        margin: auto;
+    }
+
+    table{
+        margin: auto;
+        margin-top: 50px;
+        border-collapse: collapse;
+        width: 600px;
+
+        caption{
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        thead{
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        tr{
+            border-collapse: collapse;
+        }
+
+        td, th{
+            padding: 15px;
+            text-align: center;
+        }
+
+        tbody tr:nth-child(even){
+            background-color: var(--secondary-color);
+            color: #fff
+        }
+        tbody tr:nth-child(even):hover{
+            box-shadow: inset 0 0 100px 100px var(--secondary-hover-color);
+        }
+        tbody tr:nth-child(odd){
+            color:#000;
+        }
+        tbody tr:nth-child(odd):hover{
+            background-color: var(--white-hover-color);
+        }
+    }
+}

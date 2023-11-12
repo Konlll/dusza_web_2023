@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Bar } from 'react-chartjs-2';
 import { FetchData } from "../custom_hooks/getUsers";
+import '../styles/Activity.css'
 
 // Needed by charts.js
 ChartJS.register(
@@ -59,18 +60,19 @@ const Activity = () => {
     }, []);
 
     return (
-        <div>
+        <div className='activity'>
             {activity ?
                 <div>
-                    <div style={{ maxWidth: "50%" }}>
+                    <h2>Legaktívabb tanárok</h2>
+                    <div className='bar'>
                         <Bar options={chartConfig} data={GenerateChartData(activity)} />
                     </div>
-                    <table style={{ width: "50%", textAlign: "center" }}>
+                    <table className='teacher-table'>
                         <caption>Tanárok</caption>
                         <thead>
                             <tr>
                                 <th>Név</th>
-                                {activity.grades.map(grade => <th key={grade}>{grade}.</th>)}
+                                {activity.grades.map(grade => <th key={grade}>{grade}. évfolyam</th>)}
                                 <th>Összesen</th>
                             </tr>
                         </thead>
@@ -79,7 +81,7 @@ const Activity = () => {
                                 <tr key={teacher.id}>
                                     <td>{teacher.name}</td>
                                     {activity.grades.map(grade =>
-                                        <td key={`${teacher.id}-${grade}`}>{teacher.grades.find(x => x.grade == grade)?._count || "0"}</td>)}
+                                        <td key={`${teacher.id}-${grade}`}>{teacher.grades.find(x => x.grade == grade)?._count || "0"} db</td>)}
                                     <td>{teacher.total}</td>
                                 </tr>)}
                         </tbody>
