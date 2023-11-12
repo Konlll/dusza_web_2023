@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import '../styles/userAndGroupList.css'
 
 const AssignGroups = () => {
     const { id } = useParams()
@@ -60,16 +61,16 @@ const AssignGroups = () => {
     return (
         <div>
             {competition && groups ?
-                <div>
+                <div className="assign-groups">
                     <h2>Csapatok hozzáadása</h2>
-                    {groups.map(group => <div key={group.id}>
+                    {groups.map(group => <div key={group.id} className="assign-group-list">
                         <span>{group.name}</span>
                         {group.competitionId == competition.id
-                            ? <button onClick={() => UnassignGroup(group)}>Eltávolítás</button>
+                            ? <button className="remove" onClick={() => UnassignGroup(group)}>Eltávolítás</button>
                             : <button onClick={() => AssignGroup(group)}>Hozzáadás</button>
                         }
                     </div>)}
-                </div> : "Loading..."}
+                </div> : <h2>Jelenleg nem található csapat</h2>}
         </div>
     );
 }
