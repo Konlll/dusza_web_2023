@@ -2,12 +2,11 @@ import { createHmac } from "crypto";
 import prisma from "./db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import {error_obj } from "./server.js";
+//import {error_obj } from "./server.js";
 dotenv.config()
 const secret = process.env.SECRET;
 
 export function HashPassword(password) {
-    console.log(`${secret}\n`)
     return createHmac('sha256', secret).update(password).digest('hex');
 }
 
@@ -25,7 +24,7 @@ export const Authenticate = (roles) => {
 
             jwt.verify(token, secret, async (err, payload) => {
                 if (err) {
-                    error_obj.err = 403; 
+                    //error_obj.err = 403;
                     return res.sendStatus(403);
                 }
 
@@ -44,7 +43,7 @@ export const Authenticate = (roles) => {
                 next();
             });
         } else {
-            error_obj.err = 401;
+            //error_obj.err = 401;
             return res.sendStatus(401);
         }
     };
