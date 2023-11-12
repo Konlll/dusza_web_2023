@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import {FetchData} from "../custom_hooks/getUsers";
+import {Form} from 'react-router-dom';
 const IntroPage = () => {
   const [introductionText, setIntroductionText] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -20,24 +22,31 @@ const IntroPage = () => {
   };
 
   const handleSubmit = () => {
-    // Itt lehetne a beküldött adatokat továbbítani a szerver felé vagy lokalizáltan tárolni
-    // Jelenleg csak az állapotok frissülnek
+    
     setIsIntroductionSubmitted(true);
-  };
-
+    let formData = new FormData();
+    console.log(...uploadedImages);
+      uploadedImages.forEach(image => 
+          {
+              formData.append("files", image);
+          });
+        FormData.append("text", introductionText);
+    FetchData("/api/intro/files","POST",localStorage.getItem("access_token"), formData)
+      .then(data => console.log(data));
+  }
   return (
     <div>
       <h1>Üdvözöljük a Bemutatkozó Oldalon!</h1>
       {!isIntroductionSubmitted && (
-        <div>
-          <label>
+        <form  method='POST' action='intro/files' encType='multipart/form-data'>
+           <label>
             Bemutatkozó szöveg:
             <textarea value={introductionText} onChange={handleTextChange} />
           </label>
           <br />
           <label>
             Képek feltöltése:
-            <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
+            <input type="file" name="files" accept="image/*" multiple onChange={handleImageUpload} />
           </label>
           <br />
           <label>
@@ -45,26 +54,8 @@ const IntroPage = () => {
             <input type="file" accept=".pdf,.doc,.docx" multiple onChange={handleDocumentUpload} />
           </label>
           <br />
-          <button onClick={handleSubmit}>Bemutatkozás elküldése</button>
-        </div>
-      )}
-      {isIntroductionSubmitted && (
-        <div>
-          <h2>Bemutatkozás Elküldve!</h2>
-          <p>{introductionText}</p>
-          <div>
-            <h3>Feltöltött Képek:</h3>
-            {uploadedImages.map((image, index) => (
-              <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} />
-            ))}
-          </div>
-          <div>
-            <h3>Feltöltött Dokumentumok:</h3>
-            {uploadedDocuments.map((document, index) => (
-              <div key={index}>{document.name}</div>
-            ))}
-          </div>
-        </div>
+          <button type='submit' onClick={handleSubmit}>Bemutatkozás elküldése</button>
+        </form>
       )}
     </div>
   );
