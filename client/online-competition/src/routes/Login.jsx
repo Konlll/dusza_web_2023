@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FetchData } from "../custom_hooks/getUsers";
 import { roleContext } from "../custom_hooks/roleContext";
@@ -9,6 +9,7 @@ const Login = () => {
     /** @type {React.MutableRefObject<string>} */
     const usernameRef = useRef("");
     const passwordRef = useRef("");
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
     const { role, setRole } = useContext(roleContext);
 
@@ -17,12 +18,19 @@ const Login = () => {
      * @param {React.FormEvent} event
      */
     const HandleSubmit = (event) => {
-        event.preventDefault()
+        event.preventDefault();
+        setError(false);
+
         FetchData("/api/auth/login", "POST", {
             username: usernameRef.current,
             password: passwordRef.current
         })
             .then(data => {
+                if (data.err) {
+                    setError(true);
+                    return;
+                }
+
                 localStorage.setItem("access_token", data);
                 let decoded = jwtDecode(data);
                 localStorage.setItem("user_id", decoded.id);
@@ -37,8 +45,9 @@ const Login = () => {
         <>
             <form className="register-login-form" onSubmit={HandleSubmit}>
                 <h2>Jelentkezzen be!</h2>
-                <input type="text" ref={usernameRef} onChange={(e) => usernameRef.current = e.target.value} placeholder="Felhasználónév" />
-                <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} placeholder="Jelszó" />
+                <input type="text" ref={usernameRef} onChange={(e) => usernameRef.current = e.target.value} required placeholder="Felhasználónév" />
+                <input type="password" ref={passwordRef} onChange={(e) => passwordRef.current = e.target.value} required placeholder="Jelszó" />
+                {error ? <p>Hibás felhasználónév vagy jelszó!</p> : ""}
                 <button type="submit">Bejelentkezés</button>
             </form>
         </>

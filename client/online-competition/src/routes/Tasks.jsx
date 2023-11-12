@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
 import '../styles/Tasks.css'
+import { FetchData } from "../custom_hooks/getUsers";
 
 const Tasks = () => {
     const [tasks, setTasks] = useState(null);
@@ -12,7 +13,9 @@ const Tasks = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [editedTask, setEditedTask] = useState(null);
 
-
+    /**
+     * Fetch the list of tasks
+     */
     const fetchTasks = () => {
         fetch(`/api/tasks`, {
             headers: {
@@ -27,6 +30,7 @@ const Tasks = () => {
             .catch(err => console.log(err));
     }
 
+    // Fetch data on first render.
     useEffect(() => {
         fetchTasks();
     }, []);
@@ -38,79 +42,68 @@ const Tasks = () => {
         }
     };
 
+    /**
+     * Upload the file containing tasks.
+     * @param {Event} event 
+     */
     const HandleUpload = async (event) => {
         event.preventDefault()
         const text = await file.text();
-        fetch("/api/tasks/upload", {
-            method: "POST",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                text: text
-            })
+        FetchData("/api/tasks/upload", "POST", {
+            text: text
         })
-            .then(res => res.json())
             .then(data => {
                 setErrors(data.errors)
                 if (data.success != 0) {
                     fetchTasks();
                 }
-            })
-            .catch(err => console.log(err));
+            });
     }
 
-
+    /**
+     * Closes the edit modal.
+     */
     const CloseModal = () => {
         setModalOpen(false);
         setEditedTask(null);
     }
 
+    /**
+     * Opens the edit modal.
+     * @param {Object} task 
+     */
     const EditTask = (task) => {
         setEditedTask(task);
         setModalOpen(true);
     }
 
+    /**
+     * Edits the task.
+     * @param {Event} event 
+     */
     const HandleEdit = async (event) => {
         event.preventDefault();
-        fetch(`/api/tasks/${editedTask.id}`, {
-            method: "PUT",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                word1: event.target.word1.value,
-                word2: event.target.word2.value,
-                word3: event.target.word3.value,
-                word4: event.target.word4.value,
-                grade: parseInt(event.target.grade.value)
+        FetchData(`/api/tasks/${editedTask.id}`, "PUT", {
+            word1: event.target.word1.value,
+            word2: event.target.word2.value,
+            word3: event.target.word3.value,
+            word4: event.target.word4.value,
+            grade: parseInt(event.target.grade.value)
 
-            })
         })
-            .then(res => res.json())
             .then(data => {
                 fetchTasks();
                 CloseModal();
-            })
-            .catch(err => console.log(err));
+            });
     }
 
-
+    /**
+     * Deletes the task
+     * @param {Object} task 
+     */
     const HandleDelete = (task) => {
-        fetch(`/api/tasks/${task.id}`, {
-            method: "DELETE",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            }
-        })
-            .then(res => fetchTasks())
-            .catch(err => console.log(err));
+        FetchData(`/api/tasks/${task.id}`, "DELETE", {})
+            .then(res => fetchTasks());
     }
 
     return (
@@ -169,7 +162,7 @@ const Task = ({ task, editFunction, deleteFunction }) => {
             {localStorage.getItem("user_id") == task.teacherId ? <div>
                 <button onClick={() => editFunction(task)}><FaPencilAlt /></button>
                 <button onClick={() => deleteFunction(task)}><FaTrashAlt /></button>
-            </div> : ""}
+            </div> : <div />}
         </li>
     )
 }

@@ -8,7 +8,10 @@ export const settingsRouter = express.Router();
 settingsRouter.put("/", Authenticate("ADMIN"), async (req, res) => {
     /*const iconpath = util.promisify(fs.readFile)(req.body.icon, "binary")
     .then(data => Buffer.from(data.slice(0,1024)))
-    .catch(err => res.status(500).send(err));*/
+    .catch(err => res.status(500).send(err));
+
+    console.log(iconpath)*/
+    console.log(req.body)
 
     const result = await prisma.settings.update({
         where:

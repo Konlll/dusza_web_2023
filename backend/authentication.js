@@ -2,18 +2,32 @@ import { createHmac } from "crypto";
 import prisma from "./db.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-//import {error_obj } from "./server.js";
 dotenv.config()
 const secret = process.env.SECRET;
 
+/**
+ * Hashes the password for storing in the database.
+ * @param {String} password 
+ * @returns 
+ */
 export function HashPassword(password) {
     return createHmac('sha256', secret).update(password).digest('hex');
 }
 
+/**
+ * Sign a jwt token so the user can log in.
+ * @param {object} user 
+ * @returns 
+ */
 export function GenerateToken(user) {
     return jwt.sign({ id: user.id, role: user.role }, secret);
 }
 
+/**
+ * Protects endpoints from unauthorized access.
+ * @param {String[]} roles List of roles that should have access to this endpoint.
+ * @returns 
+ */
 export const Authenticate = (roles) => {
     return (req, res, next) => {
         const secret = process.env.SECRET;
@@ -24,7 +38,6 @@ export const Authenticate = (roles) => {
 
             jwt.verify(token, secret, async (err, payload) => {
                 if (err) {
-                    //error_obj.err = 403;
                     return res.sendStatus(403);
                 }
 
@@ -35,7 +48,6 @@ export const Authenticate = (roles) => {
                 })
 
                 if (user == null || !roles.includes(user.role)) {
-                    //error_obj.err = 403;
                     return res.sendStatus(403);
                 }
 
@@ -43,7 +55,6 @@ export const Authenticate = (roles) => {
                 next();
             });
         } else {
-            //error_obj.err = 401;
             return res.sendStatus(401);
         }
     };
