@@ -5,7 +5,9 @@
 
 import {useEffect, useState} from "react";
 import UserList from "./UserList";
-import Header from "./Header";
+import Competitions from "../routes/Competitions";
+import Tasks from "../routes/Tasks";
+import Intro from "../routes/Intro";
 
 const Dashboard = () => 
 {
@@ -21,8 +23,10 @@ const Dashboard = () =>
    
     return (
         <>
-            <Header/>
             {authentication == "ADMIN" && <UserList />}
+            {authentication == "JUDGE" && <Competitions />}
+            {authentication == "TEACHER" && <Tasks />}
+            {authentication == "STUDENT" && <Intro />}
         </>
     );
 };

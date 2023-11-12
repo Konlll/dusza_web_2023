@@ -6,17 +6,22 @@ import { userActionRouter } from "./routes/user-action.js";
 import { authRouter } from "./routes/auth.js";
 import { competitionRouter } from "./routes/competitions.js";
 import { activityRouter } from "./routes/activity.js";
+<<<<<<< HEAD
 import {settingsRouter} from "./routes/settings.js";
+=======
+import { gameRouter } from "./routes/game.js";
+
+>>>>>>> master
 dotenv.config();
 const app = express();
-const port =  process.env.PORT;
+const port = process.env.PORT;
 
 //global error object
-var error_obj = 
-    {
-        err : 0
-    }; 
-export { error_obj } ;
+var error_obj =
+{
+  err: 0
+};
+export { error_obj };
 /* Middlewares */
 app.use(express.json());
 
@@ -27,12 +32,23 @@ app.use('/user', userActionRouter)
 app.use("/auth", authRouter);
 app.use("/competitions", competitionRouter);
 app.use("/activity", activityRouter);
+<<<<<<< HEAD
 app.use("/settings", settingsRouter);
+=======
+app.use("/game", gameRouter);
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+>>>>>>> master
 
-app.get("/error", (req,res) => {
-        return res.send(error_obj);
+app.get("/error", (req, res) => {
+  return res.send(error_obj);
 });
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 });

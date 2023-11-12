@@ -2,7 +2,9 @@
 
 :root {
     --primary-color: #34495E;
+    --primary-hover-color: rgb(33, 44, 95);
     --secondary-color: #3498DB;
+    --darken-secondary-color: rgb(51, 132, 219);
     --secondary-hover-color: rgba(255, 255, 255, 0.3);
     --success-color: green;
     --success-hover-color: rgb(0,100,0);
@@ -35,6 +37,44 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    height: 80px;
+    background-color: var(--primary-color);
+    color: #fff;
+
+    div{
+        a{
+            color: #fff;
+            text-decoration: none;
+            margin-right: 30px;
+        }
+
+        a:hover{
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+
+    button{
+        padding: 10px;
+        font-size: 18px;
+        background-color: transparent;
+        border: 2px solid #fff;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+
+    button:hover{
+        background-color: #fff;
+        color: var(--primary-color);
+    }
 }
 
 .d-none{

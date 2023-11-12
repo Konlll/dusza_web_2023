@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
+import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
+import '../styles/Tasks.css'
 
 const Tasks = () => {
     const [tasks, setTasks] = useState(null);
@@ -112,13 +114,15 @@ const Tasks = () => {
     }
 
     return (
-        <div>
+        <div className="tasks">
             <form onSubmit={HandleUpload}>
-                <input type="file" onChange={handleFileChange} accept="text/plain" />
-                <button type="submit">Feltöltés</button>
+                <input type="file" id="uploadFile" onChange={handleFileChange} accept="text/plain" />
+                <div>
+                    <button type="submit">Feltöltés</button>
+                </div>
             </form>
             {errors?.length != 0
-                ? <div>
+                ? <div className="errors">
                     <h3>Hibák</h3>
                     {errors.map(error =>
                         <p><span>"{error.line}"</span>: {error.error}</p>)}
@@ -131,7 +135,7 @@ const Tasks = () => {
                 : "Loading..."}
             <Modal isOpen={modalOpen} onClose={CloseModal}>
                 {editedTask ?
-                    <form key={editedTask.id} onSubmit={HandleEdit}>
+                    <form className="register-login-form" key={editedTask.id} onSubmit={HandleEdit}>
                         <h2>Feladat módosítása</h2>
                         <input type="text" placeholder="1. szó" name="word1" required defaultValue={editedTask.word1} />
                         <input type="text" placeholder="2. szó" name="word2" required defaultValue={editedTask.word2} />
@@ -148,8 +152,8 @@ const Tasks = () => {
 
 const TaskGroup = ({ tasks, grade, editFunction, deleteFunction }) => {
     return (
-        <div>
-            <h3>{grade}</h3>
+        <div className="task-list">
+            <h3>{grade}. évfolyam feladatai</h3>
             <ul>
                 {tasks.map(item =>
                     <Task task={item} key={item.id} editFunction={editFunction} deleteFunction={deleteFunction} />)}
@@ -161,10 +165,10 @@ const TaskGroup = ({ tasks, grade, editFunction, deleteFunction }) => {
 const Task = ({ task, editFunction, deleteFunction }) => {
     return (
         <li>
-            <span>{task.word1} {task.word2} {task.word3} {task.word4}</span>
+            <div>{task.word1}</div> <div>{task.word2}</div> <div>{task.word3}</div> <div>{task.word4}</div>
             {localStorage.getItem("user_id") == task.teacherId ? <div>
-                <button onClick={() => editFunction(task)}>Szerkesztés</button>
-                <button onClick={() => deleteFunction(task)}>Törlés</button>
+                <button onClick={() => editFunction(task)}><FaPencilAlt /></button>
+                <button onClick={() => deleteFunction(task)}><FaTrashAlt /></button>
             </div> : ""}
         </li>
     )
