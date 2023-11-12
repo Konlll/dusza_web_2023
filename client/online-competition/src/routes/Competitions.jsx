@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
-import { FaPencilAlt, FaTrashAlt, FaClipboardList } from 'react-icons/fa'
+import { FaPencilAlt, FaTrashAlt, FaClipboardList, FaTrophy } from 'react-icons/fa'
 import { MdGroupAdd } from "react-icons/md";
 import '../styles/LoginRegister.css'
 import '../styles/Competitions.css'
@@ -119,13 +119,18 @@ const Competition = ({ competition, editFunction, deleteFunction }) => {
             <div>{competition.description}</div>
             <div>{`${startDate.getFullYear()}-${startDate.getMonth() < 10 ? "0" + parseInt(startDate.getMonth() + 1) : startDate.getMonth() + 1}-${startDate.getDate() < 10 ? "0" + startDate.getDate() : startDate.getDate()}`}</div>
             <div>{`${endDate.getFullYear()}-${endDate.getMonth() + 1 < 10 ? "0" + parseInt(endDate.getMonth() + 1) : endDate.getMonth() + 1}-${endDate.getDate() < 10 ? "0" + endDate.getDate() : endDate.getDate()}`}</div>
-            {Date.parse(competition.startDate) > new Date() ?
-                <div>
-                    <button onClick={() => editFunction(competition)}><FaPencilAlt /></button>
-                    <button onClick={() => deleteFunction(competition)}><FaTrashAlt /></button>
-                    <button title="Hozzárendelés csoporthoz"><Link to={`/competitions/${competition.id}/groups`}><MdGroupAdd /></Link></button>
-                    <button title="Hozzárendelés feladthoz"><Link to={`/competitions/${competition.id}/tasks`}><FaClipboardList /></Link></button>
-                </div> : <div></div>}
+            <div>
+                {Date.parse(competition.startDate) > new Date()
+                    ? <>
+                        <button onClick={() => editFunction(competition)}><FaPencilAlt /></button>
+                        <button onClick={() => deleteFunction(competition)}><FaTrashAlt /></button>
+                        <button title="Hozzárendelés csoporthoz"><Link to={`/competitions/${competition.id}/groups`}><MdGroupAdd /></Link></button>
+                        <button title="Hozzárendelés feladthoz"><Link to={`/competitions/${competition.id}/tasks`}><FaClipboardList /></Link></button>
+                    </>
+                    : <>
+                        <button title="Eredmények megtekintése"><Link to={`/competitions/${competition.id}/results`}><FaTrophy /></Link></button>
+                    </>}
+            </div>
         </li>
     )
 }
