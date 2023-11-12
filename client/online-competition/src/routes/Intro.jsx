@@ -1,28 +1,31 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { FetchData } from "../custom_hooks/getUsers";
-const Intro = () => 
-{
-    const [parsedResult,setParsedResult] = useState([]);
+import '../styles/Intro.css'
+import { Link } from "react-router-dom";
+
+const Intro = () => {
+    const [parsedResult, setParsedResult] = useState([]);
     //Fetch the data 
-    useEffect(() => 
-        {
-            FetchData("/api/intro/","GET",
-            localStorage.getItem("access_token"),{})
-           .then(data => 
-                {
-                   setParsedResult(data.text.split('\n'));
-                });
-        },[]);
+    useEffect(() => {
+        FetchData("/api/intro/", "GET",
+            localStorage.getItem("access_token"), {})
+            .then(data => {
+                setParsedResult(data.text.split('\n'));
+            });
+    }, []);
     return (
-        <>
-            <h1>Bemutatkozó oldal</h1>
-            {parsedResult.map((text,index) => 
-                {
-                    return <p key={index}>{text}</p>
-                })}
-                    
-       </>
+        <div className="intro">
+            <h1>Bemutatkozás</h1>
+
+            <Link to='/game'><button>Tovább a játékra</button></Link>
+
+            {parsedResult.map((text, index) => {
+                return <p key={index}>{text}</p>
+            })}
+
+
+        </div>
     )
 };
 
