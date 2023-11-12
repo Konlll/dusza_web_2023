@@ -12,12 +12,20 @@ import NewGroup from './routes/NewGroup';
 import Competitions from './routes/Competitions';
 import AssignTasks from './routes/AssignTasks';
 import AssignGroups from './routes/AssignGroups';
+import Header from './components/Header';
+import { roleContext } from './custom_hooks/roleContext';
+import { useState } from 'react';
 
 function App() {
+
+  const [role, setRole] = useState("")
+
   return (
     <>
       <BrowserRouter>
-        <Routes>
+        <roleContext.Provider value={{ role, setRole }}>
+          <Header />
+          <Routes>
           <Route path='/' Component={Login} />
           <Route path='/register' Component={Register} />
           <Route path='/tasks' Component={Tasks} />
@@ -33,6 +41,7 @@ function App() {
           <Route path='/competitions/:id/groups' Component={AssignGroups} />
           <Route path='/competitions' Component={Competitions} />
         </Routes>
+        </roleContext.Provider>
       </BrowserRouter>
     </>
   )
