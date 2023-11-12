@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { FetchData } from "../custom_hooks/getUsers.js";
 import { FormatSeconds } from "../utils.js";
 
 const Results = () => {
     const { id } = useParams()
     const [results, setResults] = useState(null);
 
+    /**
+     * Fetch a list of teams and their results.
+     */
     useEffect(() => {
-        fetch(`/api/competitions/${id}/results`, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-            .then(res => res.json())
+        FetchData(`/api/competitions/${id}/results`, "GET", {})
             .then(data => {
                 setResults(data);
             })
-            .catch(err => console.log(err));
     }, []);
 
     return (
