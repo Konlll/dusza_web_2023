@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../styles/Game.css'
+import { FormatSeconds } from "../utils.js";
 
 const Game = () => {
     const [userData, setUserData] = useState(null);
@@ -113,13 +114,7 @@ const QuestionManager = ({ endDate }) => {
 
     const TimeLeft = () => {
         const total = Math.floor((endDate - new Date()) / 1000);
-
-        const hours = Math.floor(total / 3600);
-        const minutes = Math.floor((total - (hours * 3600)) / 60);
-        const seconds = total - (hours * 3600) - (minutes * 60);
-
-        return `${hours.toString().padStart(2, "0")} óra ${minutes.toString().padStart(2, "0")} perc ${seconds.toString().padStart(2, "0")} másodperc`;
-
+        return FormatSeconds(total);
     }
 
     return (
