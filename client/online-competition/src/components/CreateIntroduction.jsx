@@ -29,12 +29,16 @@ const IntroPage = () => {
     let formData = new FormData();
     console.log(...uploadedImages);
 
-    uploadedImages.forEach(image => {
-      formData.append("files", image);
-    });
-    formData.append("text", introductionText);
-    FetchData("/api/intro/create", "POST", localStorage.getItem("access_token"), formData)
-      .then(data => console.log(data));
+      uploadedImages.forEach(image => 
+          {
+              formData.append("files", image);
+          });
+        formData.append("text", introductionText);
+    FetchData("/api/intro/update","PUT",localStorage.getItem("access_token"), 
+        {
+            text : introductionText
+            })
+          .then(data => console.log(data));
   }
   return (
     <div className='edit-introduction'>
