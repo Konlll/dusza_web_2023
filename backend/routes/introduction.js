@@ -30,16 +30,6 @@ introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res)
         res.json(updated_intro);
 })
 
-
-introRouter.post("/create",(req,res) => {
-    console.log(req.body);
-    console.log(req.files);
-    if (!req.files || Object.keys(req.files).length === 0) 
-    {
-    return res.status(400).json({message :'No files were uploaded.'});
-    }
-    res.json({files : req.files});
-});
 /*
 introRouter.post("/file", upload.single("file"), (req, res) => 
     {

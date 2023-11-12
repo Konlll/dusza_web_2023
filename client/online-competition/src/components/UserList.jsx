@@ -1,174 +1,129 @@
-import { useEffect, useRef, useState } from "react";
-import '../styles/userAndGroupList.css'
-import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
-import { BsPlusSquareFill } from 'react-icons/bs'
+import { useEffect, useState } from "react";
+import { BsPlusSquareFill } from 'react-icons/bs';
+import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import { FetchData } from "../custom_hooks/getUsers";
+import '../styles/userAndGroupList.css';
 import Modal from "./Modal";
-import { Link, useNavigate } from "react-router-dom";
-import {FetchData} from "../custom_hooks/getUsers";
+
 const UserList = () => {
-    const [users, setUsers] = useState([])
-    const [currentUser, setCurrentUser] = useState(null)
-    const [deleteModal, setDeleteModal] = useState(false)
-    const [editModal, setEditModal] = useState(false)
-    const [editUsername, setEditUsername] = useState("")
-    const [editPassword, setEditPassword] = useState("")
-    const [editRole, setEditRole] = useState("")
-    const [editGrade, setEditGrade] = useState(null)
-    const [editClass, setEditClass] = useState("")
-    const [editGroup, setEditGroup] = useState("")
+    const [users, setUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [editUsername, setEditUsername] = useState("");
+    const [editPassword, setEditPassword] = useState("");
+    const [editRole, setEditRole] = useState("");
+    const [editGrade, setEditGrade] = useState("");
+    const [editClass, setEditClass] = useState("");
+    const [editGroup, setEditGroup] = useState("");
 
-    const [groups, setGroups] = useState([])
-
-    const competitorInfosRef = useRef(null)
+    const [groups, setGroups] = useState([]);
 
     const roles = {
         ADMIN: "Webmester",
         JUDGE: "Zsűritag",
         TEACHER: "Tanár",
         STUDENT: "Versenyző"
-    }
-
-    const handleInputs = (e) => {
-        const div = competitorInfosRef.current
-        if(e.target.value == "STUDENT"){
-            div.className = "w-500"
-        } else {
-            div.className = "d-none w-500"
-            setEditGrade("")
-            setEditClass("")
-            setEditGroup(null)
-        }
-    } 
-
-    /*const getGroup = (groupId) => {
-        if(groupId){
-            fetch(`/api/admin/group/${groupId}`, {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("access_token")}`
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                setGroups([...groups, data.name])
-            })
-            .catch(error => console.log(error))
-        }
-    }*/
-
-    const handleDelete = () => {
-        /*
-        fetch(`/api/admin/${parseInt(currentUser.id)}`, {
-            method: "DELETE",
-            headers: {
-                authorization: `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error))
-        */
-        
-        FetchData(`/api/admin/${parseInt(currentUser.id)}`,
-            "DELETE",
-            localStorage.getItem("access_token"),{}); 
-        setDeleteModal(false)
-        setUsers(users.filter(user => user !== currentUser))
-        setCurrentUser(null)
-    }
-
-    const handleEdit = (e) => {
-        e.preventDefault()
-        if(editPassword != null && editPassword != ""){
-            /*
-            fetch(`/api/admin/${parseInt(currentUser.id)}`, {
-                method: "PUT",
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: editUsername,
-                    password: editPassword,
-                    role: editRole,
-                    grade: editGrade,
-                    class: editClass,
-                    groupId: parseInt(editGroup)
-                })
-            })
-            .then(res => res.json())
-            .then(data => console.log(data))
-            .catch(error => console.log(error))
-            */
-             
-                FetchData(`/api/admin/${parseInt(currentUser.id)}`,"PUT", 
-                    {
-                    username: editUsername,
-                    password: editPassword,
-                    role: editRole,
-                    grade: editGrade,
-                    class: editClass,
-                    groupId: parseInt(editGroup)
-                    });
-             
-            } 
-            else {
-
-            fetch(`/api/admin/${parseInt(currentUser.id)}`, {
-                method: "PUT",
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: editUsername,
-                    role: editRole,
-                    grade: editGrade,
-                    class: editClass,
-                    groupId: editGroup
-                })
-            })
-            .then(res => res.json())
-            .then(data => console.log(data))
-            .catch(error => console.log(error))
-        }
-        setEditModal(false)
-        setUsers([])
-        setCurrentUser(null)
-        setEditUsername("")
-        setEditPassword("")
-        setEditRole("")
-        setEditGrade(null)
-        setEditClass("")
-    }
-
-    const UserList =  () => {
-        if(localStorage.getItem("access_token") && localStorage.getItem("role") == "ADMIN"){
-            
-             FetchData("/api/admin/","GET",localStorage.getItem("access_token"),{})
-            .then(data => setUsers(data));
-            
-            FetchData("/api/admin/groups/", "GET", localStorage.getItem("access_token"),{})
-            .then(data => setGroups(data))
-            
-        } else {
-            const navigate = useNavigate()
-            navigate('/')
-        }
     };
-    useEffect( () => 
-        {
-            UserList();
-        },[]);
 
-    useEffect( () => 
-        {
-            const intervalId = setInterval(() => 
-                {
-                    UserList();
-                },900);
-            return () => clearInterval(intervalId);
-        },[])
+    /**
+     * Fetches the list of all users and groups.
+     */
+    const FetchUsers = () => {
+
+        FetchData("/api/admin/", "GET", {})
+            .then(data => setUsers(data));
+
+        FetchData("/api/admin/groups/", "GET", {})
+            .then(data => setGroups(data))
+    };
+
+    // Fetch data when the component is first loaded.
+    useEffect(() => {
+        FetchUsers();
+    }, []);
+
+    /**
+     * Clears all fields and closes modals.
+     */
+    const ClearFields = () => {
+        setEditModal(false);
+        setDeleteModal(false);
+
+        setCurrentUser(null);
+        setEditUsername("");
+        setEditPassword("");
+        setEditRole("");
+        setEditGrade("");
+        setEditClass("");
+        setEditGroup("");
+    };
+
+    /**
+     * Opens the edit modal.
+     * @param {object} user The user to edit.
+     */
+    const OpenEdit = (user) => {
+        setEditModal(true);
+        setCurrentUser(user);
+
+        setEditUsername(user.username);
+        setEditPassword("");
+        setEditRole(user.role);
+        setEditGrade(user.grade || "");
+        setEditClass(user.class || "");
+        setEditGroup(user.groupId || "");
+    }
+
+    /**
+     * Edits the user.
+     * @param {Event} e 
+     */
+    const handleEdit = (e) => {
+        e.preventDefault();
+
+        let body = {
+            username: editUsername,
+            password: editPassword,
+            role: editRole,
+            groupId: parseInt(editGroup)
+        };
+
+        if (editRole == "STUDENT") {
+            body.grade = editGrade;
+            body.class = editClass;
+        };
+
+        if (editPassword != null && editPassword != "") {
+            body.password = editPassword;
+        };
+
+        FetchData(`/api/admin/${parseInt(currentUser.id)}`, "PUT", body)
+            .then(data => FetchUsers());
+
+        ClearFields();
+    }
+
+    /**
+     * Opens the delete modal.
+     * @param {object} user The user to delete.
+     */
+    const OpenDelete = (user) => {
+        setDeleteModal(true);
+        setCurrentUser(user);
+    }
+
+    /**
+     * Deletes the user.
+     */
+    const handleDelete = () => {
+        const data = FetchData(`/api/admin/${parseInt(currentUser.id)}`, "DELETE", {})
+            .then(data => FetchUsers());
+
+        setDeleteModal(false);
+        setCurrentUser(null);
+    }
 
     return (
         <div className="user-list">
@@ -188,33 +143,22 @@ const UserList = () => {
                     <div>Interakció</div>
                 </div>
                 {users.map(user => {
-                    return(
+                    return (
                         <div className="user-row" key={user.id}>
                             <div>{user.username}</div>
                             <div>{roles[user.role]}</div>
                             <div>{user.grade}</div>
                             <div>{user.class}</div>
-                            <div>{/*getGroup(user.groupId)*/}</div>
+                            <div>{user.group?.name}</div>
                             <div>
-                                <button onClick={() => {
-                                    setEditModal(true)
-                                    setCurrentUser(user)
-                                    setEditUsername(user.username)
-                                    setEditRole(user.role)
-                                    setEditGrade(user.grade && user.grade)
-                                    setEditClass(user.class && user.class)
-                                    setEditGroup(user.groupId ? user.groupId : "")
-                                }}><FaPencilAlt /></button>
-                                <button onClick={() => {
-                                    setDeleteModal(true)
-                                    setCurrentUser(user)
-                                }}><FaTrashAlt /></button>
+                                <button onClick={() => OpenEdit(user)}><FaPencilAlt /></button>
+                                {user.id == localStorage.getItem("user_id") ? "" : <button onClick={() => OpenDelete(user)}><FaTrashAlt /></button>}
                             </div>
                         </div>
                     )
                 })}
             </div>
-            <Modal isOpen={deleteModal} onClose={setDeleteModal} children={
+            <Modal isOpen={deleteModal} onClose={ClearFields} children={
                 <>
                     <h2>Biztosan el szeretné távolítani?</h2>
                     <div className="delete-buttons">
@@ -226,28 +170,26 @@ const UserList = () => {
                     </div>
                 </>
             } />
-            <Modal isOpen={editModal} onClose={setEditModal} children={
+            <Modal isOpen={editModal} onClose={ClearFields} children={
                 <>
                     <h2>Felhasználó szerkesztése</h2>
                     <form method="POST" className="edit-user-form register-login-form">
 
-                        <input type="text" value={editUsername && editUsername} onChange={(e) => setEditUsername(e.target.value)} placeholder="Felhasználónév" />
-                        <input type="password" onChange={(e) => setEditPassword(e.target.value)} placeholder="Jelenelegi jelszó módosítása" />
-                        <select value={editRole && editRole} onChange={(e) => {
-                            handleInputs(e)
-                            setEditRole(e.target.value)
-                        }}>
-                            <option value="STUDENT">versenyző</option>
-                            <option value="TEACHER">tanár</option>
-                            <option value="JUDGE">zsűritag</option>
+                        <input type="text" value={editUsername} onChange={(e) => setEditUsername(e.target.value)} placeholder="Felhasználónév" />
+                        <input type="password" value={editPassword} onChange={(e) => setEditPassword(e.target.value)} placeholder="Jelenelegi jelszó módosítása" />
+                        <select value={editRole} onChange={(e) => setEditRole(e.target.value)}
+                            className={currentUser?.id == localStorage.getItem("user_id") ? "d-none" : ""}>
+                            <option value="STUDENT">Versenyző</option>
+                            <option value="TEACHER">Tanár</option>
+                            <option value="JUDGE">Zsűritag</option>
                         </select>
-                        <div className={currentUser && currentUser.role != "STUDENT" ? "d-none w-500" : "w-500"} ref={competitorInfosRef}>
-                            <input type="text" value={editClass && editClass} onChange={(e) => setEditClass(e.target.value)} placeholder="Osztály" />
-                            <input type="number" value={editGrade && editGrade} onChange={(e) => setEditGrade(e.target.value)} min={5} max={8} placeholder="Évfolyam" />
-                            <select onChange={(e) => setEditGroup(e.target.value)} value={editGroup && editGroup}>
+                        <div className={currentUser && editRole != "STUDENT" ? "d-none w-500" : "w-500"}>
+                            <input type="number" value={editGrade} onChange={(e) => setEditGrade(e.target.value)} min={5} max={8} placeholder="Évfolyam" />
+                            <input type="text" value={editClass} onChange={(e) => setEditClass(e.target.value)} placeholder="Osztály" />
+                            <select onChange={(e) => setEditGroup(e.target.value)} value={editGroup}>
                                 <option>Válasszon!</option>
                                 {groups.map(group => {
-                                    return(
+                                    return (
                                         <option key={group.id} value={parseInt(group.id)}>{group.name}</option>
                                     )
                                 })}
@@ -255,14 +197,10 @@ const UserList = () => {
                         </div>
 
                         <div className="edit-buttons">
+                            <button onClick={(e) => handleEdit(e)}>Jóváhagyás</button>
                             <button onClick={(e) => {
-                                
-                                handleEdit(e)
-                            }}>Jóváhagyás</button>
-                            <button onClick={(e) => {
-                                e.preventDefault()
-                                setEditModal(false)
-                                setCurrentUser(null)
+                                e.preventDefault();
+                                ClearFields();
                             }}>Mégsem</button>
                         </div>
                     </form>
@@ -271,5 +209,5 @@ const UserList = () => {
         </div>
     );
 }
- 
+
 export default UserList;

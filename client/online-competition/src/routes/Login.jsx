@@ -1,40 +1,36 @@
-import { useContext, useRef } from "react";
-import '../styles/LoginRegister.css';
-import { useNavigate} from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { FetchData } from "../custom_hooks/getUsers";
 import { roleContext } from "../custom_hooks/roleContext";
+import '../styles/LoginRegister.css';
+
 const Login = () => {
     /** @type {React.MutableRefObject<string>} */
     const usernameRef = useRef("");
     const passwordRef = useRef("");
-    const navigate = useNavigate()
-    const { role, setRole } = useContext(roleContext)
+    const navigate = useNavigate();
+    const { role, setRole } = useContext(roleContext);
+
     /**
+     * Handles login.
      * @param {React.FormEvent} event
      */
     const HandleSubmit = (event) => {
         event.preventDefault()
-        fetch("/api/auth/login", {
-            method: "POST",
-            headers:
-            {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                username: usernameRef.current,
-                password: passwordRef.current
-            })
+        FetchData("/api/auth/login", "POST", {
+            username: usernameRef.current,
+            password: passwordRef.current
         })
-        .then(res => res.json())
-        .then(data => {
-             localStorage.setItem("access_token", data);
+            .then(data => {
+                localStorage.setItem("access_token", data);
                 let decoded = jwtDecode(data);
                 localStorage.setItem("user_id", decoded.id);
                 localStorage.setItem("role", decoded.role);
-                setRole(decoded.role)
+                setRole(decoded.role);
                 navigate("/dashboard");
-        })
-        .catch(err => navigate("/error"));
+            })
+            .catch(err => navigate("/error"));
 
     }
     return (

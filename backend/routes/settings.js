@@ -1,34 +1,33 @@
 import express from "express";
 import prisma from "../db.js";
 import fs from "fs";
-import {error_obj} from "../server.js";
+import { error_obj } from "../server.js";
 import util from "util";
+import { Authenticate } from "../authentication.js";
 export const settingsRouter = express.Router();
-settingsRouter.put("/", async (req,res) => 
-    {
-        const iconpath = util.promisify(fs.readFile)(req.body.icon, "binary")
-        .then(data => Buffer.from(data.slice(0,1024)))
-        .catch(err => res.status(500).send(err));
+settingsRouter.put("/", Authenticate("ADMIN"), async (req, res) => {
+    /*const iconpath = util.promisify(fs.readFile)(req.body.icon, "binary")
+    .then(data => Buffer.from(data.slice(0,1024)))
+    .catch(err => res.status(500).send(err));*/
 
-       const result = await prisma.settings.update({
-           where : 
-           {
-                id : 1
-           },       
-           data : {
-               title : req.body.title,
-               desc : req.body.desc,
-               icon : iconpath
-           }
-        })
-        if(result == null) 
+    const result = await prisma.settings.update({
+        where:
         {
-            error_obj.err = 404;
-            return res.status(404);
+            id: 1
+        },
+        data: {
+            title: req.body.title,
+            desc: req.body.desc,
+            icon: null //iconpath
         }
-        res.status(200).json(result);
     })
-settingsRouter.post("/create", async (req,res) => 
+    if (result == null) {
+        error_obj.err = 404;
+        return res.status(404);
+    }
+    res.status(200).json(result);
+})
+/*settingsRouter.post("/create", async (req,res) => 
     {  
         const iconpath = util.promisify(fs.readFile)(req.body.icon, "binary")
         .then(data => Buffer.from(data.slice(0,1024))
@@ -43,20 +42,18 @@ settingsRouter.post("/create", async (req,res) =>
             }
         )
         res.status(200).json(new_settings);
-    });
+    });*/
 
-settingsRouter.get("/", async (req,res) => 
-    {
-        const setting =  await prisma.settings.findFirst({
-            where: 
-            {
-                id: 1
-            }
-        });
-        if (result == null) 
+settingsRouter.get("/", Authenticate("ADMIN"), async (req, res) => {
+    const setting = await prisma.settings.findFirst({
+        where:
         {
-            error_obj.err = 404;
-            return res.status(404);
+            id: 1
         }
-        res.status(200).json(setting);
     });
+    if (setting == null) {
+        error_obj.err = 404;
+        return res.status(404);
+    }
+    res.status(200).json(setting);
+});

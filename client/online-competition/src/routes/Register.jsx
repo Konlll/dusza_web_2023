@@ -1,73 +1,53 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FetchData } from "../custom_hooks/getUsers";
 
 const Register = () => {
-    const usernameRef = useRef(null)
-    const passwordRef = useRef(null)
-    const roleRef = useRef(null)
-    const gradeRef = useRef(null)
-    const classRef = useRef(null)
-    const navigate = useNavigate()
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+    const [grade, setGrade] = useState("");
+    const [classValue, setClass] = useState("");
 
-    const competitorInfosRef = useRef(null)
+    const navigate = useNavigate();
+
     /** 
+     * Registers a new user.
      * @param {React.FormEvent} event
      */
     const handleRegister = (event) => {
-        // TODO: Handle Register
-        event.preventDefault()
-        fetch("/api/auth/register", 
-            {
-                method: "POST",
-                headers: 
-                {
-                    "Content-type" : "application/json"
-                },
-                body: JSON.stringify(
-                    {
-                        username: usernameRef.current.value,
-                        password: passwordRef.current.value,
-                        role: roleRef.current.value,
-                        grade: parseInt(gradeRef.current.value) || null,
-                        class : classRef.current.value
-                    })
-            }).then(res => res.json()).then(data => {
-                console.log(data)
-            });
-            navigate('/dashboard')
-    }
+        event.preventDefault();
 
-    const handleInputs = (e) => {
-        const div = competitorInfosRef.current
-        if(e.target.value == "STUDENT"){
-            div.className = ""
-        } else {
-            div.className = "d-none"
-            gradeRef.current.value = ""
-            classRef.current.value = ""
-        }
-    } 
+        FetchData("/api/auth/register", "POST", {
+            username: username,
+            password: password,
+            role: role,
+            grade: parseInt(grade) || null,
+            class: classValue || null
+        })
+            .then(data => navigate('/dashboard'));
+    }
 
     return (
         <form className="register-login-form" onSubmit={handleRegister}>
             <h2>Felhasználó regisztrálása</h2>
-            <input ref={usernameRef} type="text" placeholder="Felhasználónév" />
-            <input ref={passwordRef} type="password" placeholder="Jelszó" />
-            <select ref={roleRef} onChange={(e) => handleInputs(e)}>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" required placeholder="Felhasználónév" />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required placeholder="Jelszó" />
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
                 <option>Válasszon!</option>
-                <option value="STUDENT">versenyző</option> 
-                <option  value="TEACHER">tanár</option>
-                <option value="JUDGE">zsűritag</option>
+                <option value="STUDENT">Versenyző</option>
+                <option value="TEACHER">Tanár</option>
+                <option value="JUDGE">Zsűritag</option>
             </select>
             {/* Ha versenyző*/}
-            <div className="d-none" ref={competitorInfosRef}>
-                <input ref={gradeRef} type="number" min={5} max={8} placeholder="Évfolyam" />
-                <input ref={classRef} type="text" placeholder="Osztály" />
+            <div className={role == "STUDENT" ? "w-500" : "d-none"}>
+                <input value={grade} onChange={(e) => setGrade(e.target.value)} type="number" min={5} max={8} placeholder="Évfolyam" />
+                <input value={classValue} onChange={(e) => setClass(e.target.value)} type="text" placeholder="Osztály" />
             </div>
 
             <button type="submit">Regisztráció</button>
         </form>
     );
 }
- 
+
 export default Register;
