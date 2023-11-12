@@ -77,6 +77,29 @@ model Settings {
   icon  Bytes?
 }
 
+model Intro {
+    id Int @id @default(autoincrement())
+    text String
+    documents Document[]
+    pictures Picture[]
+} 
+
+model Document {
+    id Int @id @default(autoincrement())
+    documentName String?
+    documentPath String?
+    introId Int
+    intro Intro @relation(fields: [introId], references: [id])
+}
+
+model Picture {
+    id Int @id @default(autoincrement())
+    pictureName String
+    picturePath String
+    introId Int
+    intro Intro @relation(fields: [introId], references: [id])
+}
+
 enum Role {
   ADMIN
   JUDGE

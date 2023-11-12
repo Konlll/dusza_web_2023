@@ -6,7 +6,9 @@ import { userActionRouter } from "./routes/user-action.js";
 import { authRouter } from "./routes/auth.js";
 import { competitionRouter } from "./routes/competitions.js";
 import { activityRouter } from "./routes/activity.js";
+import {settingsRouter} from "./routes/settings.js";
 import { gameRouter } from "./routes/game.js";
+import { introRouter } from "./routes/introduction.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +30,8 @@ app.use('/user', userActionRouter)
 app.use("/auth", authRouter);
 app.use("/competitions", competitionRouter);
 app.use("/activity", activityRouter);
+app.use("/settings", settingsRouter);
+app.use("/intro", introRouter);
 app.use("/game", gameRouter);
 app.get('/', (req, res) => {
   res.send('Hello World');
@@ -39,5 +43,4 @@ app.get("/error", (req, res) => {
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
-
 });
