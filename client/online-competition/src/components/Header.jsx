@@ -48,14 +48,13 @@ const Header = () =>
                         
                     <Case condition={role == "TEACHER"}>
                             <Link to="/tasks">Feladatok</Link>
-                        </Case> 
+                    </Case> 
                     <Case condition={role == "STUDENT"}> 
                             <Link to="/intro">Bemutatkozó oldal</Link>
-                        </Case> 
+                    </Case> 
                     <Case condition={role == "JUDGE"}> 
                             <Link to="/dashboard">Versenyek</Link>
-                            <Link to="/results">Versenyeredmények</Link>
-                        </Case> 
+                    </Case> 
                     </Switch>
                     <Link to="/about">Rólunk</Link>
                     {role && <button onClick={logout}>Kijelentkezés</button>}

@@ -4,7 +4,7 @@ const Intro = () =>
      //TODO: fetch all variables from the database
     return (
         <>
-            <p>{introductionText}</p>
+            <p>{/*introductionText*/}</p>
         </>
     )
 };

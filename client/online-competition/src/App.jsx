@@ -17,6 +17,8 @@ import Header from './components/Header';
 import { roleContext } from './custom_hooks/roleContext';
 import { useState } from 'react';
 import About from './routes/About';
+import Results from './routes/Results';
+import Settings from './routes/Settings'
 
 function App() {
 
@@ -28,23 +30,25 @@ function App() {
         <roleContext.Provider value={{ role, setRole }}>
           <Header />
           <Routes>
-          <Route path='/' Component={Login} />
-          <Route path='/register' Component={Register} />
-          <Route path='/tasks' Component={Tasks} />
-          <Route path='/dashboard' Component={Dashboard} />
-          <Route path='/intro' Component={Intro} />
-          <Route path='/create-intro' Component={IntroPage} />
-          <Route path='/error' Component={ErrorPage} />
-          <Route path='*' element={<ErrorPage errorValue={404} />} />
-          <Route path='/activity' Component={Activity} />
-          <Route path='/groups' Component={GroupList} />
-          <Route path='/new-group' Component={NewGroup} />
-          <Route path='/competitions/:id/tasks' Component={AssignTasks} />
-          <Route path='/competitions/:id/groups' Component={AssignGroups} />
-          <Route path='/competitions' Component={Competitions} />
-          <Route path='/about' Component={About} />
-          <Route path='/game' Component={Game} />
-        </Routes>
+            <Route path='/' Component={Login} />
+            <Route path='/register' Component={Register} />
+            <Route path='/tasks' Component={Tasks} />
+            <Route path='/dashboard' Component={Dashboard} />
+            <Route path='/intro' Component={Intro} />
+            <Route path='/create-intro' Component={IntroPage} />
+            <Route path='/error' Component={ErrorPage} />
+            <Route path='*' element={<ErrorPage errorValue={404} />} />
+            <Route path='/activity' Component={Activity} />
+            <Route path='/groups' Component={GroupList} />
+            <Route path='/new-group' Component={NewGroup} />
+            <Route path='/competitions/:id/tasks' Component={AssignTasks} />
+            <Route path='/competitions/:id/groups' Component={AssignGroups} />
+            <Route path='/competitions/:id/results' Component={Results} />
+            <Route path='/competitions' Component={Competitions} />
+            <Route path='/about' Component={About} />
+            <Route path='/game' Component={Game} />
+            <Route path='/settings' Component={Settings} />
+          </Routes>
         </roleContext.Provider>
       </BrowserRouter>
     </>

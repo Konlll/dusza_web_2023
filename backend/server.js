@@ -8,7 +8,8 @@ import { competitionRouter } from "./routes/competitions.js";
 import { activityRouter } from "./routes/activity.js";
 import {settingsRouter} from "./routes/settings.js";
 import { gameRouter } from "./routes/game.js";
-import {introRouter} from "./routes/introduction.js";
+import { introRouter } from "./routes/introduction.js";
+
 dotenv.config();
 const app = express();
 const port = process.env.PORT;
