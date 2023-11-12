@@ -12,6 +12,9 @@
   <script>
        document.title = localStorage.getItem("title") || "Online vetélkedő"
        document.querySelector('meta[name="description"]').setAttribute("content", localStorage.getItem("desc") || "Online vetélkedő iskolásoknak" );
+       window.addEventListener("storage", () => {
+        document.querySelector('meta[name="description"]').setAttribute("content", localStorage.getItem("desc") || "Online vetélkedő iskolásoknak" );
+       })
       
   </script>
   </body>

@@ -15,7 +15,7 @@ import AssignGroups from './routes/AssignGroups';
 import Game from './routes/Game';
 import Header from './components/Header';
 import { roleContext } from './custom_hooks/roleContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import About from './routes/About';
 import Results from './routes/Results';
 import Settings from './routes/Settings'
@@ -23,6 +23,20 @@ import Settings from './routes/Settings'
 function App() {
 
   const [role, setRole] = useState("")
+
+  useEffect(() => {
+    fetch('/api/settings', {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        document.title = data.title
+      })
+      .catch(error => console.log(error))
+  }, [])
 
   return (
     <>
