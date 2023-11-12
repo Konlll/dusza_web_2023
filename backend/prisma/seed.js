@@ -119,7 +119,7 @@ async function main() {
 
     const intro = await prisma.intro.create({
         data: {
-            text: ""
+            text: "Üdv ebben a szókirakó játékban! Az alábbi gombra kattintva elkezdheted a játékot."
         }
     })
 }
