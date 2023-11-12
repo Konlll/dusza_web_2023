@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import '../styles/Game.css'
 
 const Game = () => {
     const [userData, setUserData] = useState(null);
@@ -25,12 +26,12 @@ const Game = () => {
     const endDate = () => new Date(Date.parse(userData.endDate));
 
     return (
-        <div>
+        <div className="pre-game">
             {error
                 ? <p>{error}</p>
                 : (userData
                     ? <div>
-                        <h2>{userData.competitioName}</h2>
+                        <h2>{userData.competitionName}</h2>
                         <p>{userData.groupName} - {userData.username}</p>
                         {startDate() > new Date()
                             ? <p>A verseny hamarosan kezdődik.</p>
@@ -117,12 +118,12 @@ const QuestionManager = ({ endDate }) => {
         const minutes = Math.floor((total - (hours * 3600)) / 60);
         const seconds = total - (hours * 3600) - (minutes * 60);
 
-        return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        return `${hours.toString().padStart(2, "0")} óra ${minutes.toString().padStart(2, "0")} perc ${seconds.toString().padStart(2, "0")} másodperc`;
 
     }
 
     return (
-        <div>
+        <div className="game">
             {questions
                 ? (submitResults
                     ? <div>
@@ -130,18 +131,22 @@ const QuestionManager = ({ endDate }) => {
                         <p>Eltelt idő: {submitResults.minutes} perc</p>
                     </div>
                     : <div>
+                        <h3>Segítség:</h3>
                         <ul>
                             {questions[questionIndex].hints.map(hint =>
                                 <li key={hint}>
                                     {hint}
                                 </li>)}
                         </ul>
-                        <h4>{questions[questionIndex].word}</h4>
+                        <h3>Kitalálandó szó:</h3>
+                        <h4><i>{questions[questionIndex].word}</i></h4>
                         <input type="text" placeholder="Válasz" onChange={HandleChange} key={questionIndex} defaultValue={answers[questionIndex]} />
-                        <button onClick={Prev} disabled={questionIndex == 0}>Előző kérdés</button>
-                        <button onClick={Next}>{questionIndex == questions.length - 1 ? "Beküldés" : "Következő kérdés"}</button>
+                        <div className="button-div">
+                            <button onClick={Prev} disabled={questionIndex == 0}>Előző kérdés</button>
+                            <button onClick={Next}>{questionIndex == questions.length - 1 ? "Beküldés" : "Következő kérdés"}</button>
+                        </div>
                         <p>Feladat: {questionIndex + 1} / {questions.length}</p>
-                        <p>Eltelt idő: {time}</p>
+                        <p>Eltelt idő: {time} másodperc</p>
                         <p>Hátralévő idő: {TimeLeft()}</p>
                     </div>)
                 : "Loading..."}
