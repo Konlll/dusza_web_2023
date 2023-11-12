@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import { useParams } from "react-router";
+import '../styles/userAndGroupList.css'
 
 const AssignTasks = () => {
     const { id } = useParams()
@@ -60,17 +61,18 @@ const AssignTasks = () => {
     }
 
     return (
-        <div>
+        <div className="assign-tasks">
             {competition && tasks ?
                 <div>
                     <h2>Feladatok hozzáadása</h2>
-                    {tasks.map(task => <>
-                        <input type="checkbox" name="task" id={task.id} value={task.id} defaultChecked={IsDefaultChecked(task.id)} />
-                        <label htmlFor={task.id}>{task.word1} {task.word2} {task.word3} {task.word4}</label>
-                    </>)}
+                    {tasks.map(task => 
+                        <div key={task.id} className="task">
+                            <input type="checkbox" name="task" id={task.id} value={task.id} defaultChecked={IsDefaultChecked(task.id)} />
+                            <label htmlFor={task.id}>{task.word1} {task.word2} {task.word3} {task.word4}</label>
+                        </div>)}
                     <button onClick={AssignTasks}>Mentés</button>
                     {showError ? <p>A feladatok száma hárommal osztható kell hogy legyen.</p> : ""}
-                </div> : "Loading..."}
+                </div> : <h3>Jelenleg nincs feladat amit hozzá lehet adni.</h3>}
         </div>
     );
 }

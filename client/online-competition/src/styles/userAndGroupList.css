@@ -132,3 +132,89 @@
 .w-500{
     max-width: 500px;
 }
+
+.assign-groups{
+    margin: 80px auto;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 15px;
+    border-radius: 3px;
+
+    .assign-group-list{
+
+        span {
+            font-size: 22px;
+        }
+
+        button{
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #fff;
+            margin-top: 15px;
+            font-size: 18px;
+            background-color: var(--success-color);
+            margin-left: 15px;
+            transition: all 0.5s;
+        }
+
+        button.remove{
+            background-color: var(--danger-color);
+        }
+        button.remove:hover{
+            background-color: var(--danger-hover-color);
+        }
+
+        button:hover{
+            background-color: var(--success-hover-color);
+        }
+    }
+}
+
+.assign-tasks{
+    margin: 80px auto;
+    width: 50%;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 3px;
+    padding: 15px;
+
+    h3, p{
+        text-align: center;
+    }
+
+    .task{
+        width: 70%;
+        margin: auto;
+        padding-left: 45px;
+
+        input{
+            width: 10%;
+        }
+
+        label{
+            font-size: 18px;
+        }
+
+    }
+    button{
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        color: #fff;
+        margin-top: 15px;
+        font-size: 18px;
+        background-color: var(--secondary-color);
+        margin-left: 15px;
+        transition: all 0.5s;
+    }
+    button:hover{
+        background-color: var(--darken-secondary-color);
+    }
+}

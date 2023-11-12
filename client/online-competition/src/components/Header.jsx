@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import { roleContext } from '../custom_hooks/roleContext';
 
 const Case = ({ condition, children }) => (condition ? children : null);
 
@@ -17,26 +19,47 @@ const Switch = ({ children }) => {
 
 const Header = () => 
 {
-    const role = localStorage.getItem("role");
-    console.log(role);
+    const navigate = useNavigate()
+    const {role, setRole} = useContext(roleContext)
+    useEffect(() => {
+        setRole(localStorage.getItem("role"));
+    }, [role])
+
+    const logout = () => {
+        localStorage.removeItem("role")
+        setRole("")
+        localStorage.removeItem("access_token")
+        navigate('/')
+    }
+
     return (
         <>
             <nav>
-                <Switch>
-                   <Case condition={role == "ADMIN"}>
-                           <p>admin condition</p>
-                    </Case> 
-                    
-                   <Case condition={role == "TEACHER"}>
-                           <p>teacher condition</p>
-                    </Case> 
-                   <Case condition={role == "STUDENT"}> 
-                        <p>student condition</p>
-                    </Case> 
-                   <Case condition={role == "JUDGE"}> 
-                        <p>jury condition</p>
-                    </Case> 
-                </Switch>
+                <h1>Online vetélkedő</h1>
+                <div>
+                    <Switch>
+                    <Case condition={role == "ADMIN"}>
+                            <Link to="/register">Új felhasználó</Link>
+                            <Link to="/dashboard">Felhasználók</Link>
+                            <Link to="/groups">Csoportok</Link>
+                            <Link to="/create-intro">Bemutatkozás szerkesztése</Link>
+                            <Link to="/settings">Beállítások</Link>
+                        </Case> 
+                        
+                    <Case condition={role == "TEACHER"}>
+                            <Link to="/tasks">Feladatok</Link>
+                        </Case> 
+                    <Case condition={role == "STUDENT"}> 
+                            <Link to="/intro">Bemutatkozó oldal</Link>
+                        </Case> 
+                    <Case condition={role == "JUDGE"}> 
+                            <Link to="/dashboard">Versenyek</Link>
+                            <Link to="/results">Versenyeredmények</Link>
+                        </Case> 
+                    </Switch>
+                    <Link to="/about">Rólunk</Link>
+                    {role && <button onClick={logout}>Kijelentkezés</button>}
+                </div>
             </nav>
         </>
     );
