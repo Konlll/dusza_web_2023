@@ -30,16 +30,20 @@ introRouter.post("/", upload.array("files"),async (req,res) => {
    const files = req.files;
     const document_files = [];
     const picture_files = [];
+    if (!files) 
+    {
+        return res.status(500).json({error : "something went wrong"});
+    }
     files.forEach(file => 
         {
             const ext = file.originalname.split('.').pop().toLowerCase();
             if (["pdf","doc","txt", "docx"].includes(ext)) 
             {
-                documents.push(file);
+                document_files.push(file);
             }
             else if (["jpg", "png", "jpeg", "webp","svg"].includes(ext)) 
             {
-                pictures.push(file);
+                picture_files.push(file);
             }
             else 
             {
@@ -69,3 +73,9 @@ introRouter.post("/", upload.array("files"),async (req,res) => {
     res.status(200).json({pictures : createdPictures, documents : createdDocuments});
 
 });
+
+introRouter.post("/file", upload.single("file"), (req, res) => 
+    {
+        const file = req.file;
+        return res.json({file : file});
+    })
