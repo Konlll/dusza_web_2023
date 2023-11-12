@@ -72,7 +72,7 @@ const UserList = () => {
         const data = FetchData(`/api/admin/${parseInt(currentUser.id)}`,
             "DELETE",
             localStorage.getItem("access_token"),{}); 
-        console.log(data);
+        //console.log(data);
         
         setDeleteModal(false)
         setUsers(users.filter(user => user !== currentUser))
