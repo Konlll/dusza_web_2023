@@ -63,7 +63,7 @@ model Result {
   competitionId Int
   competition   Competition @relation(fields: [competitionId], references: [id])
   userId        Int
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   score         Int
   time          Int
 
@@ -78,26 +78,26 @@ model Settings {
 }
 
 model Intro {
-    id Int @id @default(autoincrement())
-    text String
-    documents Document[]
-    pictures Picture[]
-} 
+  id        Int        @id @default(autoincrement())
+  text      String
+  documents Document[]
+  pictures  Picture[]
+}
 
 model Document {
-    id Int @id @default(autoincrement())
-    documentName String?
-    documentPath String?
-    introId Int
-    intro Intro @relation(fields: [introId], references: [id])
+  id           Int     @id @default(autoincrement())
+  documentName String?
+  documentPath String?
+  introId      Int
+  intro        Intro   @relation(fields: [introId], references: [id])
 }
 
 model Picture {
-    id Int @id @default(autoincrement())
-    pictureName String
-    picturePath String
-    introId Int
-    intro Intro @relation(fields: [introId], references: [id])
+  id          Int    @id @default(autoincrement())
+  pictureName String
+  picturePath String
+  introId     Int
+  intro       Intro  @relation(fields: [introId], references: [id])
 }
 
 enum Role {
