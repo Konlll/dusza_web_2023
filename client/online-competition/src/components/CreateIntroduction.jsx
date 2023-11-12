@@ -26,6 +26,7 @@ const IntroPage = () => {
     setIsIntroductionSubmitted(true);
     let formData = new FormData();
     console.log(...uploadedImages);
+
       uploadedImages.forEach(image => 
           {
               formData.append("files", image);
