@@ -162,7 +162,7 @@ const Task = ({ task, editFunction, deleteFunction }) => {
             {localStorage.getItem("user_id") == task.teacherId ? <div>
                 <button onClick={() => editFunction(task)}><FaPencilAlt /></button>
                 <button onClick={() => deleteFunction(task)}><FaTrashAlt /></button>
-            </div> : ""}
+            </div> : <div />}
         </li>
     )
 }
