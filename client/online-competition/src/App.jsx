@@ -18,6 +18,7 @@ import { roleContext } from './custom_hooks/roleContext';
 import { useState } from 'react';
 import About from './routes/About';
 import Results from './routes/Results';
+import Settings from './routes/Settings'
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
             <Route path='/competitions' Component={Competitions} />
             <Route path='/about' Component={About} />
             <Route path='/game' Component={Game} />
+            <Route path='/settings' Component={Settings} />
           </Routes>
         </roleContext.Provider>
       </BrowserRouter>
