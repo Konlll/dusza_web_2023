@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const Case = ({ condition, children }) => (condition ? children : null);
 
@@ -24,19 +25,25 @@ const Header = () =>
             <nav>
                 <Switch>
                    <Case condition={role == "ADMIN"}>
-                           <p>admin condition</p>
+                         <Link to="/register">Új felhasználó</Link>
+                         <Link to="/dashboard">Felhasználók</Link>
+                         <Link to="/groups">Csoportok</Link>
+                         <Link to="/create-intro">Bemutatkozás szerkesztése</Link>
+                         <Link to="/settings">Beállítások</Link>
                     </Case> 
                     
                    <Case condition={role == "TEACHER"}>
-                           <p>teacher condition</p>
+                         <Link to="/tasks">Feladatok</Link>
                     </Case> 
                    <Case condition={role == "STUDENT"}> 
-                        <p>student condition</p>
+                         <Link to="/intro">Bemutatkozó oldal</Link>
                     </Case> 
                    <Case condition={role == "JUDGE"}> 
-                        <p>jury condition</p>
+                         <Link to="/competitions">Versenyek</Link>
+                         <Link to="/results">Versenyeredmények</Link>
                     </Case> 
                 </Switch>
+                <Link to="/about">Rólunk</Link>
             </nav>
         </>
     );
