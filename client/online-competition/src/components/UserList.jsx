@@ -4,13 +4,12 @@ import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
 import { BsPlusSquareFill } from 'react-icons/bs'
 import Modal from "./Modal";
 import { Link, useNavigate } from "react-router-dom";
-
+import {FetchData} from "../custom_hooks/getUsers";
 const UserList = () => {
     const [users, setUsers] = useState([])
     const [currentUser, setCurrentUser] = useState(null)
     const [deleteModal, setDeleteModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
-
     const [editUsername, setEditUsername] = useState("")
     const [editPassword, setEditPassword] = useState("")
     const [editRole, setEditRole] = useState("")
@@ -58,6 +57,7 @@ const UserList = () => {
     }*/
 
     const handleDelete = () => {
+        /*
         fetch(`/api/admin/${parseInt(currentUser.id)}`, {
             method: "DELETE",
             headers: {
@@ -67,6 +67,13 @@ const UserList = () => {
         .then(res => res.json())
         .then(data => console.log(data))
         .catch(error => console.log(error))
+        */
+        
+        const data = FetchData(`/api/admin/${parseInt(currentUser.id)}`,
+            "DELETE",
+            localStorage.getItem("access_token"),{}); 
+        console.log(data);
+        
         setDeleteModal(false)
         setUsers(users.filter(user => user !== currentUser))
         setCurrentUser(null)
@@ -75,6 +82,7 @@ const UserList = () => {
     const handleEdit = (e) => {
         e.preventDefault()
         if(editPassword != null && editPassword != ""){
+            /*
             fetch(`/api/admin/${parseInt(currentUser.id)}`, {
                 method: "PUT",
                 headers: {
@@ -93,7 +101,21 @@ const UserList = () => {
             .then(res => res.json())
             .then(data => console.log(data))
             .catch(error => console.log(error))
-        } else {
+            */
+             
+                FetchData(`/api/admin/${parseInt(currentUser.id)}`,"PUT", 
+                    {
+                    username: editUsername,
+                    password: editPassword,
+                    role: editRole,
+                    grade: editGrade,
+                    class: editClass,
+                    groupId: parseInt(editGroup)
+                    });
+             
+            } 
+            else {
+
             fetch(`/api/admin/${parseInt(currentUser.id)}`, {
                 method: "PUT",
                 headers: {
@@ -122,32 +144,33 @@ const UserList = () => {
         setEditClass("")
     }
 
-    useEffect(() => {
+    const UserList =  () => {
         if(localStorage.getItem("access_token") && localStorage.getItem("role") == "ADMIN"){
-            fetch("/api/admin/", {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("access_token")}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => setUsers(data))
-                .catch(err => console.log(err))
             
-            fetch("/api/admin/groups/", {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem("access_token")}`
-                }
-            })
-            .then(res => res.json())
+             FetchData("/api/admin/","GET",localStorage.getItem("access_token"),{})
+            .then(data => setUsers(data));
+            
+            FetchData("/api/admin/groups/", "GET", localStorage.getItem("access_token"),{})
             .then(data => setGroups(data))
-            .catch(error => console.log(error))
-        } else{
+            
+        } else {
             const navigate = useNavigate()
             navigate('/')
         }
-    }, [users])
+    };
+    useEffect( () => 
+        {
+            UserList();
+        },[]);
+
+    useEffect( () => 
+        {
+            const intervalId = setInterval(() => 
+                {
+                    UserList();
+                },900);
+            return () => clearInterval(intervalId);
+        },[])
 
     return (
         <div className="user-list">
