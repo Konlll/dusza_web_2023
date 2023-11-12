@@ -81,8 +81,8 @@ introRouter.put("/update",upload.array("files",2) ,async (req,res) =>
 })
 
 
-/*
-introRouter.post("/create", upload.array("files",2),async (req,res) => {
+
+introRouter.post("/create", upload.array("files",2), (req,res) => {
 
     const files = req.files;
     const document_files = [];
@@ -117,7 +117,7 @@ introRouter.post("/create", upload.array("files",2),async (req,res) => {
             name: file.originalname,
             path : file.path
         }));
-    const intro_record = await prisma.intro.create( 
+    const intro_record =  prisma.intro.create( 
         {
             data: 
             {

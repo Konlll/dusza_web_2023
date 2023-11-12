@@ -28,22 +28,6 @@ settingsRouter.put("/", async (req,res) =>
         }
         res.status(200).json(result);
     })
-settingsRouter.post("/create", async (req,res) => 
-    {  
-        const iconpath = util.promisify(fs.readFile)(req.body.icon, "binary")
-        .then(data => Buffer.from(data.slice(0,1024))
-        .catch(err => res.status(500).send(err)));
-        const new_settings = await prisma.settings.create({
-           data : {
-                   id: 1,
-                   title : req.body.title,
-                   desc : req.body.desc,
-                   icon: iconpath
-               }
-            }
-        )
-        res.status(200).json(new_settings);
-    });
 
 settingsRouter.get("/", async (req,res) => 
     {
