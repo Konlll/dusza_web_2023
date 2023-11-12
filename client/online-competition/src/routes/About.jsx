@@ -15,8 +15,8 @@ const About = () => {
                 </div>
                 <div className="card">
                     <h2>Györfi Marcell</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta magnam quis distinctio animi corrupti adipisci?</p>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi atque aut distinctio impedit sit libero.</p>
+                    <p>Érdeklődöm az informatika, a tudomány, és a filmek iránt.</p>
+                    <p>Szabadidőmben programozok, játszok, vagy gitározok.</p>
                 </div>
                 <div className="card">
                     <h2>Balogh Tamás</h2>
@@ -27,5 +27,5 @@ const About = () => {
         </div>
     );
 }
- 
+
 export default About;
