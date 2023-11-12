@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import { useParams } from "react-router";
-import '../styles/userAndGroupList.css'
+import '../styles/userAndGroupList.css';
+import { FetchData } from "../custom_hooks/getUsers";
 
 const AssignTasks = () => {
     const { id } = useParams()
@@ -9,6 +10,9 @@ const AssignTasks = () => {
     const [tasks, setTasks] = useState(null);
     const [showError, setShowError] = useState(false);
 
+    /**
+     * Fetch the competition and a list of tasks.
+     */
     const fetchData = async () => {
         let res = await fetch(`/api/competitions/${id}`, {
             headers: {
@@ -27,10 +31,14 @@ const AssignTasks = () => {
         setTasks(data);
     }
 
+    // Fetch data when first rendered
     useEffect(() => {
         fetchData();
     }, []);
 
+    /**
+     * Assings selected tasks to the competition.
+     */
     const AssignTasks = () => {
         const elements = document.querySelectorAll("input[name='task']:checked");
         const tasks = Array.from(elements).map(x => x.value);
@@ -42,18 +50,9 @@ const AssignTasks = () => {
             return;
         }
 
-        fetch(`/api/competitions/${id}/tasks`, {
-            method: "POST",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                tasks: tasks
-            })
-        })
-            .catch(err => console.log(err));
+        FetchData(`/api/competitions/${id}/tasks`, "POST", {
+            tasks: tasks
+        });
     };
 
     const IsDefaultChecked = (id) => {
@@ -65,7 +64,7 @@ const AssignTasks = () => {
             {competition && tasks ?
                 <div>
                     <h2>Feladatok hozzáadása</h2>
-                    {tasks.map(task => 
+                    {tasks.map(task =>
                         <div key={task.id} className="task">
                             <input type="checkbox" name="task" id={task.id} value={task.id} defaultChecked={IsDefaultChecked(task.id)} />
                             <label htmlFor={task.id}>{task.word1} {task.word2} {task.word3} {task.word4}</label>

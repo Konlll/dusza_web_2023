@@ -61,7 +61,7 @@ model Task {
 model Result {
   id            Int         @id @default(autoincrement())
   competitionId Int
-  competition   Competition @relation(fields: [competitionId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
   userId        Int
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   score         Int

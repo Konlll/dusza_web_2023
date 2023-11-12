@@ -1,9 +1,12 @@
 import express from "express";
-import prisma from "../db.js";
 import { Authenticate } from "../authentication.js";
+import prisma from "../db.js";
 
 export const activityRouter = express.Router();
 
+/**
+ * Aggregates data about teacher activity.
+ */
 activityRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
     const teachers = await prisma.user.findMany({
         where: {
@@ -11,6 +14,7 @@ activityRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
         }
     });
 
+    // Get all possible grades.
     let grades = await prisma.task.findMany({
         select: {
             grade: true
@@ -24,6 +28,7 @@ activityRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
 
     let teacherCounts = []
 
+    // Count how many tasks a teacher created, broken down by grade.
     for (const teacher of teachers) {
         const tasks = await prisma.task.groupBy({
             by: "grade",
@@ -44,6 +49,7 @@ activityRouter.get("/", Authenticate(["ADMIN"]), async (req, res) => {
             });
     }
 
+    // Sort teachers by their total tasks created.
     teacherCounts.sort((a, b) => a.total - b.total).reverse();
 
     res.json({ grades: grades, teachers: teacherCounts });
