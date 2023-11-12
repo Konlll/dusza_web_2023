@@ -32,17 +32,6 @@ const NewGroup = () => {
             navigate('/groups')
     }
 
-    const handleInputs = (e) => {
-        const div = competitorInfosRef.current
-        if(e.target.value == "STUDENT"){
-            div.className = ""
-        } else {
-            div.className = "d-none"
-            gradeRef.current.value = ""
-            classRef.current.value = ""
-        }
-    } 
-
     return (
         <form className="register-login-form" onSubmit={handleAddNewGroup}>
             <h2>Új csoport létrehozása</h2>

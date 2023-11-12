@@ -39,6 +39,44 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    height: 80px;
+    background-color: var(--primary-color);
+    color: #fff;
+
+    div{
+        a{
+            color: #fff;
+            text-decoration: none;
+            margin-right: 30px;
+        }
+
+        a:hover{
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+
+    button{
+        padding: 10px;
+        font-size: 18px;
+        background-color: transparent;
+        border: 2px solid #fff;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+
+    button:hover{
+        background-color: #fff;
+        color: var(--primary-color);
+    }
+}
+
 .d-none{
     display: none;
 }
