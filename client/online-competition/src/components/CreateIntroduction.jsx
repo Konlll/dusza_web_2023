@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import {FetchData} from "../custom_hooks/getUsers";
-import {Form} from 'react-router-dom';
+import { FetchData } from "../custom_hooks/getUsers";
+import { Form } from 'react-router-dom';
+import '../styles/editIntroduction.css'
+
 const IntroPage = () => {
   const [introductionText, setIntroductionText] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -8,8 +10,8 @@ const IntroPage = () => {
   const [isIntroductionSubmitted, setIsIntroductionSubmitted] = useState(false);
 
   const handleTextChange = (event) => {
-      setIntroductionText(event.target.value);
-    };
+    setIntroductionText(event.target.value);
+  };
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -22,40 +24,33 @@ const IntroPage = () => {
   };
 
   const handleSubmit = () => {
-    
+
     setIsIntroductionSubmitted(true);
     let formData = new FormData();
     console.log(...uploadedImages);
 
-      uploadedImages.forEach(image => 
-          {
-              formData.append("files", image);
-          });
-        formData.append("text", introductionText);
-    FetchData("/api/intro/create","POST",localStorage.getItem("access_token"), formData)
+    uploadedImages.forEach(image => {
+      formData.append("files", image);
+    });
+    formData.append("text", introductionText);
+    FetchData("/api/intro/create", "POST", localStorage.getItem("access_token"), formData)
       .then(data => console.log(data));
   }
   return (
-    <div>
-      <h1>Üdvözöljük a Bemutatkozó Oldalon!</h1>
+    <div className='edit-introduction'>
+      <h1>Bemutatkozó oldal szerkesztése</h1>
       {!isIntroductionSubmitted && (
-        <form  method='POST' encType='multipart/form-data'>
-           <label>
-            Bemutatkozó szöveg:
-            <textarea value={introductionText} onChange={handleTextChange} />
-          </label>
-          <br />
-          <label>
-            Képek feltöltése:
-            <input type="file" name="files" accept="image/*" multiple onChange={handleImageUpload} />
-          </label>
-          <br />
-          <label>
-            Dokumentumok feltöltése:
-            <input type="file" accept=".pdf,.doc,.docx" name='files' multiple onChange={handleDocumentUpload} />
-          </label>
-          <br />
-          <button type='submit' onClick={handleSubmit}>Bemutatkozás elküldése</button>
+        <form method='POST' encType='multipart/form-data'>
+          <textarea placeholder='Bemutatkozó szöveg' value={introductionText} onChange={handleTextChange} />
+          <div className='filesUpload'>
+            <label htmlFor='images'>Képek feltöltése:</label>
+            <input type="file" id='images' name="files" accept="image/*" multiple onChange={handleImageUpload} />
+          </div>
+          <div className='filesUpload'>
+            <label htmlFor='documents'>Dokumentumok feltöltése:</label>
+            <input type="file" id='documents' accept=".pdf,.doc,.docx" name='files' multiple onChange={handleDocumentUpload} />
+          </div>
+          <button type='submit' onClick={handleSubmit}>Küldés</button>
         </form>
       )}
     </div>
