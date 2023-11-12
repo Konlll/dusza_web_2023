@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import React from "react";
 import { FetchData } from "../custom_hooks/getUsers";
 const Intro = () => 
 {
@@ -45,7 +46,7 @@ const Intro = () =>
         {
             FetchData("/api/intro/","GET",
             localStorage.getItem("access_token"),{})
-            then(data => 
+           .then(data => 
                 {
                    setParsedResult(parseText(data.text));
                 });

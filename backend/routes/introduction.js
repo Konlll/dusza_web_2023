@@ -16,6 +16,7 @@ introRouter.get("/", async (req,res) =>
     });
 introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res) => 
     {
+        const {text} = req.body
         const updated_intro = await prisma.intro.update(
             {
                 where: 
@@ -24,9 +25,9 @@ introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res)
                 },
                 data: 
                 {
-                    text : req.body.text
+                    text : text
                 }
-            })
+            });
         if(updated_intro == null) 
         {
             error_obj.err = 500;

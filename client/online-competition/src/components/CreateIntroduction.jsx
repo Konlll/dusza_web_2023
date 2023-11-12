@@ -32,8 +32,11 @@ const IntroPage = () => {
               formData.append("files", image);
           });
         formData.append("text", introductionText);
-    FetchData("/api/intro/create","POST",localStorage.getItem("access_token"), formData)
-      .then(data => console.log(data));
+    FetchData("/api/intro/update","PUT",localStorage.getItem("access_token"), 
+        {
+            text : introductionText
+            })
+          .then(data => console.log(data));
   }
   return (
     <div>
