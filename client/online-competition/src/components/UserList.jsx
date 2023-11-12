@@ -106,7 +106,7 @@ const UserList = () => {
     }
 
     /**
-     * Opens the delete model.
+     * Opens the delete modal.
      * @param {object} user The user to delete.
      */
     const OpenDelete = (user) => {
