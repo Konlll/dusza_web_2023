@@ -8,6 +8,7 @@ import { competitionRouter } from "./routes/competitions.js";
 import { activityRouter } from "./routes/activity.js";
 import {settingsRouter} from "./routes/settings.js";
 import { gameRouter } from "./routes/game.js";
+
 dotenv.config();
 const app = express();
 const port = process.env.PORT;
@@ -29,6 +30,7 @@ app.use("/auth", authRouter);
 app.use("/competitions", competitionRouter);
 app.use("/activity", activityRouter);
 app.use("/settings", settingsRouter);
+app.use("/intro", introRouter);
 app.use("/game", gameRouter);
 app.get('/', (req, res) => {
   res.send('Hello World');
