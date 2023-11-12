@@ -35,7 +35,7 @@ export const Authenticate = (roles) => {
                 })
 
                 if (user == null || !roles.includes(user.role)) {
-                    error_obj.err = 403;
+                    //error_obj.err = 403;
                     return res.sendStatus(403);
                 }
 

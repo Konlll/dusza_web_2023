@@ -23,8 +23,8 @@ async function main() {
             name: "Félévi verseny",
             description: "Iskola-szintű verseny 7. osztályos tanulóknak",
             grade: 7,
-            startDate: new Date(2023, 11, 14),
-            endDate: new Date(2023, 11, 16)
+            startDate: new Date(2023, 10, 12),
+            endDate: new Date(2023, 10, 16)
         }
     });
 
