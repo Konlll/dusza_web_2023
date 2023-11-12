@@ -1,22 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../styles/Settings.css'
 
 const Settings = () => {
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
 
-    const ChangeSettings = (e) => {
-        e.preventDefault();
-        //TODO: fetch and post the settings and get it from the database
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(title)
+        console.log(desc)
+        fetch('/api/settings', {
+            method: "PUT",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title,
+                desc
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            document.title = title
+            let x = window.open("", "myWindow", "toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=10, height=10, visible=none")
+            x.localStorage.setItem("desc", data.desc)
+            x.close()
+        })
+        .catch(error => console.log(error))
     }
+
+    useEffect(() => {
+        fetch('/api/settings', {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            setTitle(data.title)
+            setDesc(data.desc)
+        })
+        .catch(error => console.log(error))
+    }, [])
+
     return (
         <div className="settings">
             <h2>Beállítások szerkesztése</h2>
-            <form onSubmit={ChangeSettings}>
-                <input type="text" placeholder="A weboldal új neve" onChange={(e) => setTitle((prev) => prev = e.target.value)} />
-                <input type="text" placeholder="A weboldal új leírása" onChange={(e) => setDesc((prev) => prev = e.target.value)} />
+            <form action="PUT">
+                <input type="text" placeholder="A weboldal új neve" onChange={(e) => setTitle(e.target.value)} value={title || ""} />
+                <input type="text" placeholder="A weboldal új leírása" onChange={(e) => setDesc(e.target.value)} value={desc || ""} />
                 <input type="file" accept=".png, .jpg, .jpeg, .ico" />
-                <button>Bevitel</button>
+                <button onClick={(e) => handleSubmit(e)}>Bevitel</button>
             </form>
         </div>
     )
