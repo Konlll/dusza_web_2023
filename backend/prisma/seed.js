@@ -108,6 +108,19 @@ async function main() {
                 }
             }
         }
+
+    })
+    const setting = await prisma.settings.create({
+        data: {
+            title: "Online vetélkedő",
+            desc: "Online vetélkedő felső tagozatosoknak"
+        }
+    })
+
+    const intro = await prisma.intro.create({
+        data: {
+            text: ""
+        }
     })
 }
 main()
