@@ -16,6 +16,7 @@ import Game from './routes/Game';
 import Header from './components/Header';
 import { roleContext } from './custom_hooks/roleContext';
 import { useState } from 'react';
+import About from './routes/About';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
           <Route path='/competitions/:id/tasks' Component={AssignTasks} />
           <Route path='/competitions/:id/groups' Component={AssignGroups} />
           <Route path='/competitions' Component={Competitions} />
+          <Route path='/about' Component={About} />
           <Route path='/game' Component={Game} />
         </Routes>
         </roleContext.Provider>
