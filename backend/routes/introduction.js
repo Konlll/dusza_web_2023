@@ -1,20 +1,9 @@
 import express from "express";
 import prisma from "../db.js"
-import multer from "multer";
-import path from "path";
+import fileupload from "express-fileupload";
+import {error_obj} from "../server.js";
 export const introRouter = express.Router();
-const storage = multer.diskStorage(
-    {
-        destination : (req,file,callback) => 
-        {
-            callback(null,'uploads/')
-        },
-        filename: (req, file, callback) => 
-        {
-                    callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-        }
-    })
-const upload = multer({storage : storage});
+introRouter.use(fileupload({createParentPath : true}))
 introRouter.get("/", async (req,res) => 
     {
         const introduction_details = await prisma.intro.findFirst();
@@ -24,116 +13,32 @@ introRouter.get("/", async (req,res) =>
         }
         return res.status(200).json(introduction_details);
     });
-introRouter.put("/update",upload.array("files",2) ,async (req,res) => 
+introRouter.put("/update",fileupload({createParentPath : true}) ,async (req,res) => 
     {
-        const files = req.files;
-        const document_files = [];
-        const image_files = [];
-        console.log(req.body.files);
-        console.log(req.files);
-        if(files.length === 0) 
-        {
-            return res.status(500).send({err : "Something went wrong during the upload"})
-        }
-        files.forEach(file => 
-            {
-                let extension = file.originalname.split('.').pop().toLowerCase();
-                if(["png","jpg","jpeg","webp"].includes(extension)) 
-                {
-                    image_files.push(file);
-                }
-                else if(["doc","docx","pdf"].includes(extension)) 
-                {
-                    document_files.push(file);
-                }
-            });
-        const doc_objects = document_files.map(file => (
-            {
-                introId: 1,
-                name: file.originalname,
-                path : file.path
-            }));
-        const img_objects = image_files.map(file => 
-            ({
-                introId : 1,
-                name: file.originalname,
-                path : file.path
-            }));
         const updated_intro = await prisma.intro.update(
             {
                 data: 
                 {
-                    text : req.body.text,
-                    documents : {
-                        update : doc_objects
-                    },
-                    pictures:
-                    {
-                        update : img_objects
-                    }
+                    text : req.body.text
                 }
-            });
+            })
         if(updated_intro == null) 
         {
-            return res.status(500).json({error : "Internal Server Error"});
+            error_obj.err = 500;
+            return res.json({error : "internal server error"});
         }
-        res.status(200).json({success : "Successfully updated introduction page." });
+        res.json(updated_intro);
 })
 
 
-/*
-introRouter.post("/create", upload.array("files",2),async (req,res) => {
-
-    const files = req.files;
-    const document_files = [];
-    const image_files = [];
-    console.log(req.body.files);
+introRouter.post("/create",(req,res) => {
+    console.log(req.body);
     console.log(req.files);
-    if(files.length === 0) 
+    if (!req.files || Object.keys(req.files).length === 0) 
     {
-        return res.status(500).send({err : "Something went wrong during the upload"})
+    return res.status(400).json({message :'No files were uploaded.'});
     }
-    files.forEach(file => 
-        {
-            let extension = file.originalname.split('.').pop().toLowerCase();
-            if(["png","jpg","jpeg","webp"].includes(extension)) 
-            {
-                image_files.push(file);
-            }
-            else if(["doc","docx","pdf"].includes(extension)) 
-            {
-                document_files.push(file);
-            }
-        });
-    const doc_objects = document_files.map(file => (
-        {
-            introId: 1,
-            name: file.originalname,
-            path : file.path
-        }));
-    const img_objects = image_files.map(file => 
-        ({
-            introId : 1,
-            name: file.originalname,
-            path : file.path
-        }));
-    const intro_record = await prisma.intro.create( 
-        {
-            data: 
-            {
-                text : req.body.text,
-                documents: 
-                {
-                    create : doc_objects
-                },
-                pictures: 
-                {
-                    create : img_objects
-                }
-            }
-        })
-    res.status(200).json({status : "Successfully uploaded files"});
-
+    res.json({files : req.files});
 });
 /*
 introRouter.post("/file", upload.single("file"), (req, res) => 

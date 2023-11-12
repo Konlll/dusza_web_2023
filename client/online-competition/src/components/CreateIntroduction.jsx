@@ -26,19 +26,20 @@ const IntroPage = () => {
     setIsIntroductionSubmitted(true);
     let formData = new FormData();
     console.log(...uploadedImages);
+
       uploadedImages.forEach(image => 
           {
               formData.append("files", image);
           });
-        FormData.append("text", introductionText);
-    FetchData("/api/intro/files","POST",localStorage.getItem("access_token"), formData)
+        formData.append("text", introductionText);
+    FetchData("/api/intro/create","POST",localStorage.getItem("access_token"), formData)
       .then(data => console.log(data));
   }
   return (
     <div>
       <h1>Üdvözöljük a Bemutatkozó Oldalon!</h1>
       {!isIntroductionSubmitted && (
-        <form  method='POST' action='intro/files' encType='multipart/form-data'>
+        <form  method='POST' action='/intro/create' encType='multipart/form-data'>
            <label>
             Bemutatkozó szöveg:
             <textarea value={introductionText} onChange={handleTextChange} />
