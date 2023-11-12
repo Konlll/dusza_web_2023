@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../db.js"
 import {error_obj} from "../server.js";
+import { Authenticate } from "../authentication.js";
 export const introRouter = express.Router();
 introRouter.get("/", async (req,res) => 
     {
@@ -12,7 +13,7 @@ introRouter.get("/", async (req,res) =>
         }
         return res.status(200).json(introduction_details);
     });
-introRouter.put("/update",async (req,res) => 
+introRouter.put("/update", Authenticate(["ADMIN"]), async (req,res) => 
     {
         const {text} = req.body
         const updated_intro = await prisma.intro.update(
