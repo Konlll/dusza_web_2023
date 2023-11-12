@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import '../styles/userAndGroupList.css'
+import '../styles/userAndGroupList.css';
+import { FetchData } from "../custom_hooks/getUsers";
 
 const AssignGroups = () => {
     const { id } = useParams()
     const [competition, setCompetition] = useState(null);
     const [groups, setGroups] = useState(null);
 
+    /**
+     * Fetch the competition and a list of groups.
+     */
     const fetchData = async () => {
         let res = await fetch(`/api/competitions/${id}`, {
             headers: {
@@ -25,37 +29,31 @@ const AssignGroups = () => {
         setGroups(data);
     }
 
+    // Fetch data when first rendered
     useEffect(() => {
         fetchData();
     }, []);
 
+    /**
+     * Assign group to competition.
+     * @param {object} group 
+     */
     const AssignGroup = (group) => {
-        fetch(`/api/admin/groups/${group.id}/assign`, {
-            method: "POST",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                competition: competition.id
-            })
+        FetchData(`/api/admin/groups/${group.id}/assign`, "POST", {
+            competition: competition.id
         })
-            .then(res => fetchData())
-            .catch(err => console.log(err));
+            .then(data => fetchData())
     };
 
+    /**
+     * Remove group from competition.
+     * @param {object} group 
+     */
     const UnassignGroup = (group) => {
-        fetch(`/api/admin/groups/${group.id}/unassign`, {
-            method: "POST",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
+        FetchData(`/api/admin/groups/${group.id}/unassign`, "POST", {
+            competition: competition.id
         })
-            .then(res => fetchData())
-            .catch(err => console.log(err));
+            .then(data => fetchData())
     };
 
     return (

@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Modal from "../components/Modal";
-import { FaPencilAlt, FaTrashAlt, FaClipboardList, FaTrophy } from 'react-icons/fa'
+import React, { useEffect, useState } from "react";
+import { FaClipboardList, FaPencilAlt, FaTrashAlt, FaTrophy } from 'react-icons/fa';
 import { MdGroupAdd } from "react-icons/md";
-import '../styles/LoginRegister.css'
-import '../styles/Competitions.css'
 import { Link } from "react-router-dom";
+import Modal from "../components/Modal";
+import '../styles/Competitions.css';
+import '../styles/LoginRegister.css';
+import { FetchData } from "../custom_hooks/getUsers";
 
 const Competitions = () => {
     const [competitions, setCompetitions] = useState(null);
     const [modalOpen, setModalOpen] = useState(false)
     const [editedCompetition, setEditedCompetition] = useState(null);
 
+    /**
+     * Fetch a list of competitions
+     */
     const fetchCompetitions = () => {
         fetch(`/api/competitions`, {
             headers: {
@@ -24,57 +28,55 @@ const Competitions = () => {
             .catch(err => console.log(err));
     }
 
+    // Fetch data on first render
     useEffect(() => {
         fetchCompetitions();
     }, []);
 
+    /**
+     * Close the edit modal.
+     */
     const CloseModal = () => {
         setEditedCompetition(null);
         setModalOpen(false);
     }
 
+    /**
+     * Open the edit modal.
+     * @param {object} competition 
+     */
     const EditCompetition = (competition) => {
         setEditedCompetition(competition);
         setModalOpen(true);
     }
 
+    /**
+     * Edit the competition.
+     * @param {event} event 
+     */
     const SubmitForm = async (event) => {
         event.preventDefault();
-        fetch(`/api/competitions/${editedCompetition ? editedCompetition.id : "new"}`, {
-            method: "PUT",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                name: event.target.name.value,
-                description: event.target.description.value,
-                grade: parseInt(event.target.grade.value),
-                startDate: event.target.startDate.value,
-                endDate: event.target.endDate.value
+        FetchData(`/api/competitions/${editedCompetition ? editedCompetition.id : "new"}`, "PUT", {
+            name: event.target.name.value,
+            description: event.target.description.value,
+            grade: parseInt(event.target.grade.value),
+            startDate: event.target.startDate.value,
+            endDate: event.target.endDate.value
 
-            })
         })
-            .then(res => res.json())
             .then(data => {
                 fetchCompetitions();
                 CloseModal();
             })
-            .catch(err => console.log(err));
     }
 
+    /**
+     * Delete the competition
+     * @param {object} competition 
+     */
     const HandleDelete = (competition) => {
-        fetch(`/api/competitions/${competition.id}`, {
-            method: "DELETE",
-            headers:
-            {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-type": "application/json"
-            }
-        })
+        FetchData(`/api/competitions/${competition.id}`, "DELETE", {})
             .then(res => fetchCompetitions())
-            .catch(err => console.log(err));
     }
 
     const FormatDate = (text) => text ? new Date(Date.parse(text)).toISOString().split('T')[0] : undefined;

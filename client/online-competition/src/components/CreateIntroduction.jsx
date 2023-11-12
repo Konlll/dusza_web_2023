@@ -42,7 +42,7 @@ const IntroPage = () => {
     <div>
       <h1>Üdvözöljük a Bemutatkozó Oldalon!</h1>
       {!isIntroductionSubmitted && (
-        <form  method='POST' action='/intro/create' encType='multipart/form-data'>
+        <form  method='POST' encType='multipart/form-data'>
            <label>
             Bemutatkozó szöveg:
             <textarea value={introductionText} onChange={handleTextChange} />
@@ -55,7 +55,7 @@ const IntroPage = () => {
           <br />
           <label>
             Dokumentumok feltöltése:
-            <input type="file" accept=".pdf,.doc,.docx" multiple onChange={handleDocumentUpload} />
+            <input type="file" accept=".pdf,.doc,.docx" name='files' multiple onChange={handleDocumentUpload} />
           </label>
           <br />
           <button type='submit' onClick={handleSubmit}>Bemutatkozás elküldése</button>

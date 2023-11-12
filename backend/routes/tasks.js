@@ -1,7 +1,7 @@
 import express from "express";
-import prisma from "../db.js";
 import { Authenticate } from "../authentication.js";
-import {error_obj} from "../server.js";
+import prisma from "../db.js";
+import { error_obj } from "../server.js";
 export const tasksRouter = express.Router();
 
 // Get all tasks
@@ -10,10 +10,9 @@ tasksRouter.get("/", Authenticate(["TEACHER", "JUDGE"]), async (req, res) => {
     const tasks = await prisma.task.findMany({
         where: grade ? { grade: parseInt(grade) } : {}
     });
-    
-    if(tasks == null) 
-    {
-        error_obj = {err: 404};
+
+    if (tasks == null) {
+        error_obj = { err: 404 };
         return res.status(404).send("error");
     }
 
@@ -25,7 +24,7 @@ tasksRouter.get("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
-        error_obj = {err: 404};
+        error_obj = { err: 404 };
         return res.status(404).send("Not found.");
     }
 
@@ -36,7 +35,7 @@ tasksRouter.get("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     });
 
     if (task == null) {
-        error_obj = {err: 404};
+        error_obj = { err: 404 };
         return res.status(404).send("Not found.");
     }
 
@@ -91,7 +90,7 @@ tasksRouter.delete("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
-        error_obj = {err: 404};
+        error_obj = { err: 404 };
         return res.status(404).send("Not found.");
     }
 
@@ -106,7 +105,7 @@ tasksRouter.delete("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     }
 
     if (task.teacherId != req.user.id) {
-        error_obj = {err: 403};
+        error_obj = { err: 403 };
         return res.sendStatus(403);
     }
 
@@ -124,7 +123,7 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
-        error_obj = {err: 404};
+        error_obj = { err: 404 };
         return res.status(404).send("Not found.");
     }
 
@@ -148,12 +147,12 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
     });
 
     if (task == null) {
-        error_obj = {err: 404};
+        error_obj = { err: 404 };
         return res.status(404).send("Not found.");
     }
 
     if (task.teacherId != req.user.id) {
-        error_obj = {err: 403};
+        error_obj = { err: 403 };
         return res.sendStatus(403);
     }
 
@@ -172,7 +171,7 @@ tasksRouter.put("/:id", Authenticate(["TEACHER"]), async (req, res) => {
         });
     }
     catch {
-        error_obj = {err: 400};
+        error_obj = { err: 400 };
         return res.status(400).send();
     }
 

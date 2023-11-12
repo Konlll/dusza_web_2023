@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
     BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    LinearScale,
     Tooltip
 } from 'chart.js';
+import React, { useEffect, useState } from "react";
 import { Bar } from 'react-chartjs-2';
+import { FetchData } from "../custom_hooks/getUsers";
 
+// Needed by charts.js
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -15,6 +17,9 @@ ChartJS.register(
     Tooltip
 );
 
+/**
+ * Config for the activity chart.
+ */
 const chartConfig = {
     responsive: true,
     plugins: {
@@ -22,6 +27,11 @@ const chartConfig = {
     }
 }
 
+/**
+ * Generates the data to display in the chart.
+ * @param {object} activity 
+ * @returns 
+ */
 const GenerateChartData = (activity) => {
     const names = activity.teachers.map(x => x.name).slice(0, 5);
     const totals = activity.teachers.map(x => x.total).slice(0, 5);
@@ -38,17 +48,14 @@ const GenerateChartData = (activity) => {
 const Activity = () => {
     const [activity, setActivity] = useState(null);
 
+    /**
+     * Fetch activity data.
+     */
     useEffect(() => {
-        fetch(`/api/activity`, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-            }
-        })
-            .then(res => res.json())
+        FetchData("/api/activity", "GET", {})
             .then(data => {
                 setActivity(data);
             })
-            .catch(err => console.log(err));
     }, []);
 
     return (
