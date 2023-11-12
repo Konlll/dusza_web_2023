@@ -20,7 +20,7 @@ const About = () => {
                 </div>
                 <div className="card">
                     <h2>Balogh Tamás</h2>
-                    <p>Érdeklődési köröm a programozás, legfőképpen az alacsony szintű nyelveken, minding is érdekelt mi áll a dolgok hátterében.</p>
+                    <p>Érdeklődési köröm a programozás, legfőképpen az alacsony szintű nyelveken, mindig is érdekelt mi áll a dolgok hátterében.</p>
                     <p>Szabad időmben leginkább videójátékokkal játszok, vagy pedig a C programozási nyelvet tanulom.</p>
                 </div>
             </div>
