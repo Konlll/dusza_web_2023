@@ -4,11 +4,6 @@ import '../styles/Settings.css'
 const Settings = () => {
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
-    const [files, setFiles] = useState([])
-
-    const handleImageUpload = (e) => {
-        setFiles(e.target.files)
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -54,7 +49,6 @@ const Settings = () => {
             <form action="PUT">
                 <input type="text" placeholder="A weboldal új neve" onChange={(e) => setTitle(e.target.value)} value={title || ""} />
                 <input type="text" placeholder="A weboldal új leírása" onChange={(e) => setDesc(e.target.value)} value={desc || ""} />
-                <input type="file" accept=".png, .jpg, .jpeg, .ico" onChange={(e) => handleImageUpload(e)} />
                 <button onClick={(e) => handleSubmit(e)}>Bevitel</button>
             </form>
         </div>
